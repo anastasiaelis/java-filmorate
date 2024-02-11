@@ -22,7 +22,6 @@ public class Film {
     private final String description;
     private final LocalDate releaseDate;
 
-
     public Film(String name, String description, LocalDate releaseDate, int duration) {
         this.name = name;
         this.description = description;

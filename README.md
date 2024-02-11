@@ -1,2 +1,2 @@
 # java-filmorate
-project
+Template repository for Filmorate project.
