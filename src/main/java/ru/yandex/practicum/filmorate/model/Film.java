@@ -13,12 +13,9 @@ import java.util.Set;
 public class Film {
 
     private int id;
-    @Positive
     private final int duration;
     private Set<Long> likes = new HashSet<>();
-    @NotBlank
     private final String name;
-    @Size(max = 200)
     private final String description;
     private final LocalDate releaseDate;
 

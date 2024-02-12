@@ -11,12 +11,9 @@ import java.time.LocalDate;
 public class User {
 
     private int id;
-    @Email
     private final String email;
-    @NotBlank
     private final String login;
     private String name;
-    @PastOrPresent
     private final LocalDate birthday;
 
     public User(String email, String login, LocalDate birthday) {
