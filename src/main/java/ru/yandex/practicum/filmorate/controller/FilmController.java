@@ -85,6 +85,7 @@ public class FilmController {
     public List<Film> getPopularMovies(@RequestParam(defaultValue = DEFAULT_VALUE_COUNT) Integer count) {
         return filmService.getPopularMovies(count);
     }
+
     @ExceptionHandler
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
