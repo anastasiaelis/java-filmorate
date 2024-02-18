@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -11,9 +12,9 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.Month;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 
 @Slf4j
@@ -22,6 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 
 public class FilmController {
+    private Integer id = 1;
+    private final Map<Integer, Film> films = new HashMap<>();
     private final FilmService filmService;
     public static final String DEFAULT_VALUE_COUNT = "10";
     public static final LocalDate DATELATEST = LocalDate.of(1895, 12, 28);
@@ -47,13 +50,13 @@ public class FilmController {
     }
 
     @PostMapping
-    public Film create(@Valid @RequestBody Film film) {
+    public ResponseEntity<Film> create(@Valid @RequestBody Film film) {
         log.info("получен запрос создания фильма: {}", film.getName());
         filmService.create(film);
         if (film.getReleaseDate().isBefore(DATELATEST)) {
             throw new ValidationException("Дата не может быть раньше " + DATELATEST);
         }
-        if (film.getName() == null || film.getName().isBlank()) {
+       /* if (film.getName() == null || film.getName().isBlank()) {
             log.error("Название фильма пустое");
             throw new ValidationException("Название фильма не может быть пустым");
         }
@@ -68,9 +71,15 @@ public class FilmController {
         if (film.getDuration() <= 0) {
             log.error("Продолжительность фильма - не положительное число");
             throw new ValidationException("Продолжительность фильма должна быть положительна");
-        }
+        }*/
         log.info("Фильм добавлен");
-        return film;
+
+
+        film.setId(id++);
+        films.put(film.getId(), film);
+        log.info("Фильм добавлен");
+        return ResponseEntity.ok(film);
+
     }
 
     @PutMapping
