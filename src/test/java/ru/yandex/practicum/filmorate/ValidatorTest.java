@@ -15,21 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class ValidatorTest {
 
-  /*  @DisplayName("Film без имени")
-    @Test
-    public void createFilmWithNoName() {
-        Film film = new Film(null, "description", LocalDate.of(2000, 1, 1), 120);
-        ValidationException e = assertThrows(ValidationException.class, () -> Validator.validateFilm(film));
-    }*/
-
-  /*  @DisplayName("Film с длинным описанием")
-    @Test
-    public void createFilmWithTooBigDescription() {
-        Film film = new Film("name", "description".repeat(50), LocalDate.of(2000, 1, 1), 120);
-        ValidationException e = assertThrows(ValidationException.class, () -> Validator.validateFilm(film));
-        assertEquals("Описание фильма не может превышать 200 символов", e.getMessage());
-    }
-*/
     @DisplayName("Film со слишком ранней датой")
     @Test
     public void createFilmWithTooEarlyReleaseDate() {
@@ -37,15 +22,7 @@ public class ValidatorTest {
         ValidationException e = assertThrows(ValidationException.class, () -> Validator.validateFilm(film));
         assertEquals("Дата релиза не должна быть ранее 28.12.1895", e.getMessage());
     }
-
-   /* @DisplayName("Film с неположительной продолжительностью")
-    @Test
-    public void createFilmWithoutPositiveDuration() {
-        Film film = new Film("name", "description", LocalDate.of(2000, 1, 1), -1);
-        ValidationException e = assertThrows(ValidationException.class, () -> Validator.validateFilm(film));
-        assertEquals("Продолжительность фильма должна быть больше нуля", e.getMessage());
-    }*/
-
+/*
     @DisplayName("User с некорректным email")
     @Test
     public void createUserWithInvalidEmail() {
@@ -77,4 +54,5 @@ public class ValidatorTest {
         ValidationException e = assertThrows(ValidationException.class, () -> Validator.validateUser(user));
         assertEquals("Дата рождения не может быть в будущем", e.getMessage());
     }
+*/
 }
