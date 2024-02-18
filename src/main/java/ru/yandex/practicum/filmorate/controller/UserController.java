@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -9,7 +10,9 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.model.ErrorResponse;
@@ -20,6 +23,8 @@ import ru.yandex.practicum.filmorate.model.ErrorResponse;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final Map<Long, User> users = new HashMap<>();
+    private long id = 1;
 
     @GetMapping("/{id}")
     public User findById(@PathVariable Integer id) {
@@ -39,26 +44,15 @@ public class UserController {
     }
 
     @PostMapping
-    public User create(@Valid @RequestBody User user) {
+    public ResponseEntity<User> create(@Valid @RequestBody User user) {
         User user1 = userService.create(user);
-        if (!user1.getEmail().contains("@")) {
-            log.error("Email пользователя пуст или не содержит @");
-            throw new ValidationException("Email должен содержать @ и не быть пустым");
+        if (user1.getName() == null || user.getName().isEmpty()) {
+            user1.setName(user.getLogin());
         }
-        if (user1.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            log.error("Логин пользователя пуст или содержит пробелы");
-            throw new ValidationException("Логин не должен быть пустым или содержать пробелы");
-        }
-        if (user1.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-            log.info("Имя пользователя пустое, будет использован логин");
-        }
-        if (user1.getBirthday().isAfter(LocalDate.now())) {
-            log.error("Дата рождения пользователя в будущем");
-            throw new ValidationException("Дата рождения не может быть в будущем");
-        }
-        log.info("Пользователь создан {}", user1.getName());
-        return user1;
+        user1.setId(id++);
+        users.put(user1.getId(), user1);
+        log.info("Пользователь создан");
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping

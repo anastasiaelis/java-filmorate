@@ -1,12 +1,13 @@
 package ru.yandex.practicum.filmorate.exception;
 
 import lombok.*;
+import org.springframework.http.HttpStatus;
 
-@AllArgsConstructor
 @Getter
 @Setter
-@ToString
+@AllArgsConstructor
 @Builder
 public class ValidationException extends RuntimeException {
-    private final String message;
+    private String message;
+    private HttpStatus status;
 }

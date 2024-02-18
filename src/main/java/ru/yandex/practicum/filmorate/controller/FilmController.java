@@ -11,10 +11,13 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
+//import javax.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 
 @Slf4j
@@ -42,11 +45,11 @@ public class FilmController {
     }
 
     @GetMapping
-    public List<Film> findAll() {
+    public ResponseEntity<List<Film>> findAll() {
         log.info("получен запрос получения списка всех фильмов.");
         List<Film> allFilms = filmService.get();
         log.info("получен список всех фильмов, кол-во: {}", allFilms.size());
-        return allFilms;
+        return  ResponseEntity.ok().body(allFilms);
     }
 
     @PostMapping
@@ -54,27 +57,10 @@ public class FilmController {
         log.info("получен запрос создания фильма: {}", film.getName());
         filmService.create(film);
         if (film.getReleaseDate().isBefore(DATELATEST)) {
-            throw new ValidationException("Дата не может быть раньше " + DATELATEST);
+            throw new ValidationException("Дата не может быть раньше " + DATELATEST,BAD_REQUEST);
         }
-       /* if (film.getName() == null || film.getName().isBlank()) {
-            log.error("Название фильма пустое");
-            throw new ValidationException("Название фильма не может быть пустым");
-        }
-        if (film.getDescription().length() > 200) {
-            log.error("Превышена максимальная длина описания фильма");
-            throw new ValidationException("Описание фильма не может превышать 200 символов");
-        }
-        if (film.getReleaseDate().isBefore(LocalDate.of(1895, Month.DECEMBER, 28))) {
-            log.error("Дата релиза фильма раньше допустимого порога");
-            throw new ValidationException("Дата релиза не должна быть ранее 28.12.1895");
-        }
-        if (film.getDuration() <= 0) {
-            log.error("Продолжительность фильма - не положительное число");
-            throw new ValidationException("Продолжительность фильма должна быть положительна");
-        }*/
+
         log.info("Фильм добавлен");
-
-
         film.setId(id++);
         films.put(film.getId(), film);
         log.info("Фильм добавлен");
@@ -83,11 +69,22 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film updateFilm(@Valid @RequestBody Film film) {
+    public ResponseEntity<Film> updateFilm(@Valid @RequestBody Film film) {
         log.info("получен запрос обновления фильма: {}", film.getName());
         filmService.update(film);
         log.info("Фильм обновлен");
-        return film;
+
+        if (films.containsKey(film.getId())) {
+            if (film.getReleaseDate().isBefore(DATELATEST)) {
+                throw new ValidationException("Дата не может быть ранее " + DATELATEST, BAD_REQUEST);
+            }
+            films.put(film.getId(), film);
+            log.info("Фильм обновлен {}.", film.getName());
+            return ResponseEntity.ok(film);
+        } else {
+            log.error("Фильм не обновлен (Не найден)");
+            return ResponseEntity.status(404).body(film);
+        }
     }
 
     @PutMapping("/{id}/like/{userId}")
