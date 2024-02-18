@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class UserControllerTest {
     UserController userController;
     User user = User.builder()
-            .email("tr tr.tr")
+            .email("tr@tr.tr")
             .login("testlogin")
             .name("testname")
             .birthday(LocalDate.of(1997, 3, 24))
