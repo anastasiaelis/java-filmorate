@@ -14,7 +14,6 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 
 @Slf4j
