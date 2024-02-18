@@ -20,16 +20,19 @@ public class InMemoryUserStorage implements UserStorage {
         log.info("Пользователь {} был создан", user.getId());
         return user;
     }
+
     @Override
     public User update(User user) {
         users.put(user.getId(), user);
         log.info("Пользователь {} был обновлен", user.getId());
         return user;
     }
+
     @Override
     public List<User> get() {
         return List.copyOf(users.values());
     }
+
     @Override
     public User getUserById(long id) {
         if (!users.containsKey(id)) {
