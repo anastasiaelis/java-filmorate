@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class FilmController {
     private final FilmService service;
     private final Map<Integer, Film> films = new HashMap<>();
-    private int id = 0;
 
     @Autowired
     public FilmController(FilmService service) {
