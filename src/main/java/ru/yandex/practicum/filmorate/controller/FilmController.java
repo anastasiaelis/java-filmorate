@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.ErrorResponse;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
@@ -84,4 +85,11 @@ public class FilmController {
     public List<Film> getPopularMovies(@RequestParam(defaultValue = DEFAULT_VALUE_COUNT) Integer count) {
         return filmService.getPopularMovies(count);
     }
+    @ExceptionHandler
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleThrowable(final Throwable e) {
+        return new ErrorResponse("Произошла непредвиденная ошибка");
+    }
+
 }

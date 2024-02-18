@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import javax.validation.Valid;
 import java.util.List;
 import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.model.ErrorResponse;
 
 @Slf4j
 @RestController
@@ -67,4 +68,11 @@ public class UserController {
     public List<User> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
         return userService.getCommonFriends(id, otherId);
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleThrowable(final Throwable e) {
+        return new ErrorResponse("Произошла непредвиденная ошибка");
+    }
+
 }
