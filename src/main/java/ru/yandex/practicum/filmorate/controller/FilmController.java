@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -29,7 +28,6 @@ public class FilmController {
 
     @GetMapping("/{id}")
 
- //   @ResponseStatus(HttpStatus.OK)
     public Film findById(@PathVariable Integer id) {
         log.info("получен запрос получения фильма по ID: {}", id);
         Film film1 = filmService.getFilmById(id);
@@ -41,7 +39,6 @@ public class FilmController {
     }
 
     @GetMapping
-   // @ResponseStatus(HttpStatus.OK)
     public List<Film> findAll() {
         log.info("получен запрос получения списка всех фильмов.");
         List<Film> allFilms = filmService.get();
@@ -50,7 +47,6 @@ public class FilmController {
     }
 
     @PostMapping
-    //@ResponseStatus(HttpStatus.CREATED)
     public Film create(@Valid @RequestBody Film film) {
         log.info("получен запрос создания фильма: {}", film.getName());
         filmService.create(film);
@@ -62,7 +58,6 @@ public class FilmController {
     }
 
     @PutMapping
-    //@ResponseStatus(HttpStatus.OK)
     public Film updateFilm(@Valid @RequestBody Film film) {
         log.info("получен запрос обновления фильма: {}", film.getName());
         filmService.update(film);
@@ -76,7 +71,6 @@ public class FilmController {
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-   // @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeLike(@PathVariable Integer id, @PathVariable Integer userId) {
         filmService.removeLike(id, userId);
     }
@@ -88,7 +82,6 @@ public class FilmController {
 
     @ExceptionHandler
 
-    //@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowable(final Throwable e) {
         return new ErrorResponse("Произошла непредвиденная ошибка");
     }
