@@ -24,11 +24,12 @@ public class Validator {
         if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
             log.error("Логин пользователя пуст или содержит пробелы");
             throw new ValidationException("Логин не должен быть пустым или содержать пробелы");
-        }
+        }*/
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
             log.info("Имя пользователя пустое, будет использован логин");
         }
+        /*
         if (user.getBirthday().isAfter(LocalDate.now())) {
             log.error("Дата рождения пользователя в будущем");
             throw new ValidationException("Дата рождения не может быть в будущем");
