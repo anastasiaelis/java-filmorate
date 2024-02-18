@@ -28,14 +28,14 @@ public class UserController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
+    //@ResponseStatus(HttpStatus.OK)
     public List<User> findAll() {
         log.info("получен запрос получения списка всех пользователей.");
         return userService.get();
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
+    //@ResponseStatus(HttpStatus.CREATED)
     public User create(@Valid @RequestBody User user) {
         User user1 = userService.create(user);
         log.info("Пользователь создан {}", user1.getName());
@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+ //   @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteFriend(@PathVariable Long id, @PathVariable Long friendId) {
         userService.deleteFromFriendsList(id, friendId);
         log.info("Пользователю удален друг {}", id);
@@ -73,7 +73,7 @@ public class UserController {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+   // @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowable(final Throwable e) {
         return new ErrorResponse("Произошла непредвиденная ошибка");
     }
