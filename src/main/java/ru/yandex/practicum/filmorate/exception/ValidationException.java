@@ -10,5 +10,4 @@ import org.springframework.http.HttpStatus;
 @Builder
 public class ValidationException extends RuntimeException {
     private final String message;
-    private final HttpStatus status;
 }

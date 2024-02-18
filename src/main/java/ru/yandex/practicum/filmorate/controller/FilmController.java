@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -51,7 +52,23 @@ public class FilmController {
         log.info("получен запрос создания фильма: {}", film.getName());
         filmService.create(film);
         if (film.getReleaseDate().isBefore(DATELATEST)) {
-            throw new ValidationException("Дата не может быть раньше " + DATELATEST, BAD_REQUEST);
+            throw new ValidationException("Дата не может быть раньше " + DATELATEST);
+        }
+        if (film.getName() == null || film.getName().isBlank()) {
+            log.error("Название фильма пустое");
+            throw new ValidationException("Название фильма не может быть пустым");
+        }
+        if (film.getDescription().length() > 200) {
+            log.error("Превышена максимальная длина описания фильма");
+            throw new ValidationException("Описание фильма не может превышать 200 символов");
+        }
+        if (film.getReleaseDate().isBefore(LocalDate.of(1895, Month.DECEMBER, 28))) {
+            log.error("Дата релиза фильма раньше допустимого порога");
+            throw new ValidationException("Дата релиза не должна быть ранее 28.12.1895");
+        }
+        if (film.getDuration() <= 0) {
+            log.error("Продолжительность фильма - не положительное число");
+            throw new ValidationException("Продолжительность фильма должна быть положительна");
         }
         log.info("Фильм добавлен");
         return film;
