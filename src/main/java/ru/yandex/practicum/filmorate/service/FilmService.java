@@ -59,7 +59,7 @@ public class FilmService {
     public void removeLike(int filmId, long userId) {
         userService.getUserById(userId);
         storage.getFilmById(filmId).getLikes().remove(userId);
-        log.info("Пользователь {} удалил лайк c фильма {}", userId, filmId);
+        log.info("Пользователь {} удалил лайк фильма {}", userId, filmId);
     }
 
     public List<Film> getPopularMovies(int count) {

@@ -51,6 +51,6 @@ class FilmControllerTest {
                     .duration(100)
                     .build();
             Throwable exception = assertThrows(ValidationException.class, () -> filmController.create(film2));
-            assertEquals(exception.getMessage(), "Дата не может быть раньше 1895-12-28");
+            assertEquals(exception.getMessage(), "Дата релиза не должна быть ранее 28.12.1895");
         }
 }

@@ -1,90 +1,61 @@
 package ru.yandex.practicum.filmorate.controller;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.model.ErrorResponse;
 
-@Slf4j
 @RestController
+
 @RequestMapping("/users")
-@RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
-    private final Map<Long, User> users = new HashMap<>();
-    private long id = 1;
+    private final UserService service;
 
-    @GetMapping("/{id}")
-    public User findById(@PathVariable Integer id) {
-        log.info("получен запрос получения пользователя по ID: {}", id);
-        User user1 = userService.getUserById(id);
-        if (user1 == null) {
-            throw new UserNotFoundException("Не найден ID: " + id);
-        }
-        log.info("получен пользователь: {}", user1);
-        return user1;
-    }
-
-    @GetMapping
-    public List<User> findAll() {
-        log.info("получен запрос получения списка всех пользователей.");
-        return userService.get();
+    @Autowired
+    public UserController(UserService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<User> create(@Valid @RequestBody User user) {
-        User user1 = userService.create(user);
-        if (user1.getName() == null || user.getName().isEmpty()) {
-            user1.setName(user.getLogin());
-        }
-        user1.setId(id++);
-        users.put(user1.getId(), user1);
-        log.info("Пользователь создан");
-        return ResponseEntity.ok(user);
+    public User create(@Valid @RequestBody User user) {
+        Validator.validateUser(user);
+        return service.create(user);
     }
 
     @PutMapping
     public User update(@Valid @RequestBody User user) {
-        User user1 = userService.update(user);
-        log.info("Пользователь обновлен {}", user1.getName());
-        return user1;
+        Validator.validateUser(user);
+        return service.update(user);
+    }
+
+    @GetMapping
+    public List<User> get() {
+        return service.get();
+    }
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable long id) {
+        return service.getUserById(id);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public void addFriend(@PathVariable Long id, @PathVariable Integer friendId) {
-        userService.addToFriendsList(id, friendId);
-        log.info("Пользователю обновлен друг {}", id);
+    public void addFriend(@PathVariable long id, @PathVariable long friendId) {
+        service.addToFriendsList(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public void deleteFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
-        userService.deleteFromFriendsList(id, friendId);
-        log.info("Пользователю удален друг {}", id);
+    public void removeFriend(@PathVariable long id, @PathVariable long friendId) {
+        service.deleteFromFriendsList(id, friendId);
     }
 
-    @GetMapping("{id}/friends")
-    public List<User> getAllFriends(@PathVariable Integer id) {
-        return userService.getFriends(id);
+    @GetMapping("/{id}/friends")
+    public List<User> getFriends(@PathVariable long id) {
+        return service.getFriends(id);
     }
 
-    @GetMapping("{id}/friends/common/{otherId}")
-    public List<User> getCommonFriends(@PathVariable Integer id, @PathVariable Integer otherId) {
-        return userService.getCommonFriends(id, otherId);
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> getCommonFriends(@PathVariable long id, @PathVariable long otherId) {
+        return service.getCommonFriends(id, otherId);
     }
-
-    @ExceptionHandler
-    public ErrorResponse handleThrowable(final Throwable e) {
-        return new ErrorResponse("Произошла непредвиденная ошибка");
-    }
-
 }

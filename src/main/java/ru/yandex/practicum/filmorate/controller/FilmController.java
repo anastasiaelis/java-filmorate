@@ -1,111 +1,61 @@
 package ru.yandex.practicum.filmorate.controller;
-
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.model.ErrorResponse;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.FilmService;
-
 import javax.validation.Valid;
-//import javax.validation.ValidationException;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-
+import ru.yandex.practicum.filmorate.service.FilmService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Slf4j
 @RestController
 @RequestMapping("/films")
-@RequiredArgsConstructor
-
 public class FilmController {
-    private Integer id = 1;
+    private final FilmService service;
     private final Map<Integer, Film> films = new HashMap<>();
-    private final FilmService filmService;
-    public static final String DEFAULT_VALUE_COUNT = "10";
-    public static final LocalDate DATELATEST = LocalDate.of(1895, 12, 28);
+    private int id = 0;
 
-    @GetMapping("/{id}")
-
-    public Film findById(@PathVariable Integer id) {
-        log.info("получен запрос получения фильма по ID: {}", id);
-        Film film1 = filmService.getFilmById(id);
-        log.info("получен фильм: {}", film1);
-        if (film1 == null) {
-            throw new FilmNotFoundException("Не найден ID: " + id);
-        }
-        return film1;
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Film>> findAll() {
-        log.info("получен запрос получения списка всех фильмов.");
-        List<Film> allFilms = filmService.get();
-        log.info("получен список всех фильмов, кол-во: {}", allFilms.size());
-        return  ResponseEntity.ok().body(allFilms);
+    @Autowired
+    public FilmController(FilmService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<Film> create(@Valid @RequestBody Film film) {
-        log.info("получен запрос создания фильма: {}", film.getName());
-        filmService.create(film);
-        if (film.getReleaseDate().isBefore(DATELATEST)) {
-            throw new ValidationException("Дата не может быть раньше " + DATELATEST,BAD_REQUEST);
-        }
-
-        log.info("Фильм добавлен");
-        film.setId(id++);
-        films.put(film.getId(), film);
-        log.info("Фильм добавлен");
-        return ResponseEntity.ok(film);
-
+    public Film create(@Valid @RequestBody Film film) {
+        Validator.validateFilm(film);
+        return service.create(film);
     }
 
     @PutMapping
-    public ResponseEntity<Film> updateFilm(@Valid @RequestBody Film film) {
-        log.info("получен запрос обновления фильма: {}", film.getName());
-        filmService.update(film);
-        log.info("Фильм обновлен");
+    public Film update(@Valid @RequestBody Film film) {
+        Validator.validateFilm(film);
+        return service.update(film);
+    }
 
-        if (films.containsKey(film.getId())) {
-            if (film.getReleaseDate().isBefore(DATELATEST)) {
-                throw new ValidationException("Дата не может быть ранее " + DATELATEST, BAD_REQUEST);
-            }
-            films.put(film.getId(), film);
-            log.info("Фильм обновлен {}.", film.getName());
-            return ResponseEntity.ok(film);
-        } else {
-            log.error("Фильм не обновлен (Не найден)");
-            return ResponseEntity.status(404).body(film);
-        }
+    @GetMapping
+    public List<Film> get() {
+        return service.get();
+    }
+
+    @GetMapping("/{id}")
+    public Film getFilmById(@PathVariable int id) {
+        return service.getFilmById(id);
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public void addLike(@PathVariable Integer id, @PathVariable Integer userId) {
-        filmService.addLike(id, userId);
+    public void addLike(@PathVariable("id") int filmId, @PathVariable long userId) {
+        service.addLike(filmId, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public void removeLike(@PathVariable Integer id, @PathVariable Integer userId) {
-        filmService.removeLike(id, userId);
+    public void removeLike(@PathVariable("id") int filmId, @PathVariable long userId) {
+        service.removeLike(filmId, userId);
     }
 
     @GetMapping("/popular")
-    public List<Film> getPopularMovies(@RequestParam(defaultValue = DEFAULT_VALUE_COUNT) Integer count) {
-        return filmService.getPopularMovies(count);
+    public List<Film> getPopularMovies(@RequestParam(required = false, defaultValue = "10") int count) {
+        return service.getPopularMovies(count);
     }
-
-    @ExceptionHandler
-
-    public ErrorResponse handleThrowable(final Throwable e) {
-        return new ErrorResponse("Произошла непредвиденная ошибка");
-    }
-
 }
