@@ -12,6 +12,7 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
+
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 
@@ -20,16 +21,17 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @RequestMapping("/films")
 @RequiredArgsConstructor
 
-public class FilmController{
+public class FilmController {
     private final FilmService filmService;
     public static final String DEFAULT_VALUE_COUNT = "10";
     public static final LocalDate DATELATEST = LocalDate.of(1895, 12, 28);
 
     @GetMapping("/{id}")
+
     @ResponseStatus(HttpStatus.OK)
     public Film findById(@PathVariable Integer id) {
         log.info("получен запрос получения фильма по ID: {}", id);
-               Film film1 = filmService.getFilmById(id);
+        Film film1 = filmService.getFilmById(id);
         log.info("получен фильм: {}", film1);
         if (film1 == null) {
             throw new FilmNotFoundException("Не найден ID: " + id);
