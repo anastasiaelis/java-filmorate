@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.exception;
 
 import lombok.*;
-import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 @Getter
