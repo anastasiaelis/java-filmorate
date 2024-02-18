@@ -6,6 +6,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+
 @Data
 public class Film {
     private int id;
@@ -17,6 +18,7 @@ public class Film {
     @Positive
     private final int duration;
     private Set<Long> likes = new HashSet<>();
+
     public int numberOfLikes() {
         return likes.size();
     }
