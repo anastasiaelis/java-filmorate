@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class ValidatorTest {
-
     @DisplayName("Film со слишком ранней датой")
     @Test
     public void createFilmWithTooEarlyReleaseDate() {
