@@ -46,25 +46,25 @@ public class FilmController {
 
     @GetMapping("/{id}")
     public Film getFilmById(@PathVariable int id) {
-        log.info("получен запрос получения фильма по ИД") ;
+        log.info("получен запрос получения фильма по ИД");
         return service.getFilmById(id);
     }
 
     @PutMapping("/{id}/like/{userId}")
     public void addLike(@PathVariable("id") int filmId, @PathVariable long userId) {
-        log.info("поставлен лайк") ;
+        log.info("поставлен лайк");
         service.addLike(filmId, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
     public void removeLike(@PathVariable("id") int filmId, @PathVariable long userId) {
-        log.info("удален лайк") ;
+        log.info("удален лайк");
         service.removeLike(filmId, userId);
     }
 
     @GetMapping("/popular")
     public List<Film> getPopularMovies(@RequestParam(required = false, defaultValue = "10") int count) {
-        log.info("получен запрос на список популярных фильмов") ;
+        log.info("получен запрос на список популярных фильмов");
         return service.getPopularMovies(count);
     }
 }
