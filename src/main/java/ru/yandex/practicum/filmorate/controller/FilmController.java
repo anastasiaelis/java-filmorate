@@ -5,9 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ru.yandex.practicum.filmorate.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
