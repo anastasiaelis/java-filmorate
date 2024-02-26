@@ -45,13 +45,13 @@ public class UserService {
     public void addToFriendsList(long userId1, long userId2) {
         storage.getUserById(userId2);
         storage.getUserById(userId1).getFriends().add(userId2);
-        storage.getUserById(userId2).getFriends().add(userId1);
+        //storage.getUserById(userId2).getFriends().add(userId1);
         log.info("Пользователи {} и {} теперь друзья", userId1, userId2);
     }
 
     public void deleteFromFriendsList(long userId1, long userId2) {
         storage.getUserById(userId2).getFriends().remove(userId1);
-        storage.getUserById(userId1).getFriends().remove(userId2);
+       // storage.getUserById(userId1).getFriends().remove(userId2);
         log.info("Пользователи {} и {} больше не друзья", userId1, userId2);
     }
 
