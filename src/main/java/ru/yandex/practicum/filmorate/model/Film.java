@@ -13,21 +13,18 @@ import java.util.Set;
 @Data
 @Builder
 public class Film {
+
     private int id;
     @NotBlank
-    private final String name;
+    private String name;
     @Size(max = 200)
-    private final String description;
-    private final LocalDate releaseDate;
+    private String description;
+    private LocalDate releaseDate;
     @Positive
-    private final int duration;
+    private int duration;
     private Set<Long> likes = new HashSet<>();
     private Mpa mpa;
     private Set<Genre> genres = new HashSet<>();
-
-    public int numberOfLikes() {
-        return likes.size();
-    }
 
     public Film(int id, String name, String description, LocalDate releaseDate, int duration, Set<Long> likes, Mpa mpa, Set<Genre> genres) {
         this.id = id;
@@ -48,5 +45,12 @@ public class Film {
         this.likes = likes;
         this.mpa = mpa;
         this.genres = genres;
+    }
+
+    public Film() {
+    }
+
+    public int numberOfLikes() {
+        return likes.size();
     }
 }
