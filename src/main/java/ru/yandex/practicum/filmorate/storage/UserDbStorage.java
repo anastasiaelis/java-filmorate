@@ -39,10 +39,10 @@ public class UserDbStorage implements UserStorage {
         String sqlQuery = "update users set email = ?, login = ?, name = ?, birthday = ? where id = ?";
         jdbcTemplate.update(sqlQuery, user.getEmail(), user.getLogin(),
                 user.getName(), user.getBirthday(), user.getId());
-        sqlQuery = "delete from friendship where friend_id = ?";
+        sqlQuery = "delete from friend where friend_id = ?";
         jdbcTemplate.update(sqlQuery, user.getId());
         if (user.getFriends() != null && !user.getFriends().isEmpty()) {
-            sqlQuery = "insert into friendship (user_id, friend_id) values (?, ?)";
+            sqlQuery = "insert into friend (user_id, friend_id) values (?, ?)";
             for (Long id : user.getFriends()) {
                 jdbcTemplate.update(sqlQuery, id, user.getId());
             }
@@ -78,7 +78,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     private User mapRowToUser(ResultSet rs) throws SQLException {
-        String sqlQuery = "select user_id from friendship where friend_id = ?";
+        String sqlQuery = "select user_id from friend where friend_id = ?";
         Set<Long> friends = new HashSet<>(jdbcTemplate.queryForList(sqlQuery, Long.class, rs.getInt("id")));
         return User.builder()
                 .id(rs.getLong("id"))
