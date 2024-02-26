@@ -16,8 +16,9 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
+//TODO переделать
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -28,19 +29,16 @@ class FilmorateApplicationTests {
     @DisplayName("Действия с пользователями")
     @Test
     public void interactWithUsersTest() {
-        User user1 = new User(1,"email1@com", "login1", "name1",
+        User user1 = new User("email1@com", "login1", "name1",
                 LocalDate.of(2000, 1, 1), new HashSet<>());
         userStorage.create(user1);
-
         assertEquals(new User(1, "email1@com", "login1", "name1",
                 LocalDate.of(2000, 1, 1), new HashSet<>()), userStorage.getUserById(1));
-
         User updatedUser = new User(1, "newemail1@com", "newlogin1", "newname1",
                 LocalDate.of(2005, 1, 1), new HashSet<>());
         userStorage.update(updatedUser);
         assertEquals(updatedUser, userStorage.getUserById(updatedUser.getId()));
-        //
-         User user2 = new User(2,"email2@com", "login2", "name2",
+        User user2 = new User("email2@com", "login2", "name2",
                 LocalDate.of(2001, 1, 1), new HashSet<>());
         userStorage.create(user2);
         assertEquals(List.of(new User(1, "newemail1@com",
