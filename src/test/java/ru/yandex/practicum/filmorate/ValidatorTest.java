@@ -15,7 +15,7 @@ import java.util.HashSet;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class validatorClass {
+public class ValidatorTest {
 
     @DisplayName("Film без имени")
     @Test
