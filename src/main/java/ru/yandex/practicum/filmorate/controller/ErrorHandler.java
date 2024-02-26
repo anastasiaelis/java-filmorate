@@ -11,24 +11,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestControllerAdvice("ru.yandex.practicum.filmorate.controller")
 public class ErrorHandler {
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleThrowable(final Throwable e) {
-        log.error("Произошла непредвиденная ошибка");
-        return new ErrorResponse("Произошла непредвиденная ошибка");
-    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final ValidationException e) {
-        log.error("ошибка" + e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
-    @ExceptionHandler({FilmNotFoundException.class, UserNotFoundException.class, MpaNotFoundException.class, GenreNotFoundException.class})
+    @ExceptionHandler({FilmNotFoundException.class, UserNotFoundException.class,
+            MpaNotFoundException.class, GenreNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleResourceNotFoundException(final Throwable e) {
-        log.error("ошибка" + e.getMessage());
         return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleThrowable(final Throwable e) {
+        return new ErrorResponse("Произошла непредвиденная ошибка");
     }
 }
