@@ -17,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @RequestMapping("/films")
 public class FilmController {
     private final FilmService service;
-    private final Map<Integer, Film> films = new HashMap<>();
-
     @Autowired
     public FilmController(FilmService service) {
         this.service = service;
