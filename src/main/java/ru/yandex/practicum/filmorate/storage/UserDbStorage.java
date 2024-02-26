@@ -51,6 +51,21 @@ public class UserDbStorage implements UserStorage {
         return getUserById(user.getId());
     }
 
+   // @Override
+    public User addFriend(User user1,User user2) {
+        getUserById(user1.getId());
+        String  sqlQuery = "insert into friend (user_id, friend_id) values (?, ?)";
+        long id1=user1.getId();
+        jdbcTemplate.update(sqlQuery, id1, user2.getId());
+        log.info("Пользователь {} был обновлен", user1.getId());
+        return getUserById(user1.getId());
+    }
+
+
+
+
+
+
     @Override
     public List<User> get() {
         String sqlQuery = "select * from users";
