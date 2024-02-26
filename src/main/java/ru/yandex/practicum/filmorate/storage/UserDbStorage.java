@@ -39,7 +39,7 @@ public class UserDbStorage implements UserStorage {
         String sqlQuery = "update users set email = ?, login = ?, name = ?, birthday = ? where id = ?";
         jdbcTemplate.update(sqlQuery, user.getEmail(), user.getLogin(),
                 user.getName(), user.getBirthday(), user.getId());
-        sqlQuery = "delete from friend where friend_id = ?";
+        sqlQuery = "delete from friends where friend_id = ?";
         jdbcTemplate.update(sqlQuery, user.getId());
         if (user.getFriends() != null && !user.getFriends().isEmpty()) {
             sqlQuery = "insert into friend (user_id, friend_id) values (?, ?)";
@@ -52,13 +52,55 @@ public class UserDbStorage implements UserStorage {
     }
 
     // @Override
-    public User addFriend(User user1, User user2) {
-        getUserById(user1.getId());
-        String sqlQuery = "insert into friend (user_id, friend_id) values (?, ?)";
-        long id1 = user1.getId();
-        jdbcTemplate.update(sqlQuery, id1, user2.getId());
-        log.info("Пользователь {} был обновлен", user1.getId());
-        return getUserById(user1.getId());
+
+    public void addFriend(Long userId, Long friendId) {
+        User user = getUserById(userId);
+        User friend = getUserById(friendId);
+        if ((user != null) && (friend != null)) {
+            boolean status = false;
+            if (friend.getFriends().contains(userId)) {
+                status = true;  // дружба стала взаимной
+                String sql = "UPDATE friends SET user_id = ? AND friend_id = ? AND status = ? " +
+                        "WHERE user_id = ? AND friend_id = ?";
+                jdbcTemplate.update(sql, friendId, userId, true, friendId, userId);
+            }
+            String sql = "INSERT INTO friends (user_id, friend_id, status) VALUES (?, ?, ?)";
+            jdbcTemplate.update(sql, userId, friendId, status);
+        }
+    }
+
+    public void deleteFriend(Long userId, Long friendId) {
+        User user = getUserById(userId);
+        User friend = getUserById(friendId);
+        if ((user != null) && (friend != null)) {
+            String sql = "DELETE FROM friends WHERE user_id = ? AND friend_id = ?";
+            jdbcTemplate.update(sql, userId, friendId);
+            if (friend.getFriends().contains(userId)) {
+                // дружба стала невзаимной - нужно поменять статус
+                sql = "UPDATE friends SET user_id = ? AND friend_id = ? AND status = ? " +
+                        "WHERE user_id = ? AND friend_id = ?";
+                jdbcTemplate.update(sql, friendId, userId, false, friendId, userId);
+            }
+        }
+    }
+
+    public List<User> getFriends(Long userId) {
+        User user = getUserById(userId);
+        if (user != null) {
+            String sql = "SELECT friend_id, email, login, name, birthday FROM friends" +
+                    " INNER JOIN users ON friends.friend_id = users.id WHERE friends.user_id = ?";
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new User(
+                            rs.getLong("friend_id"),
+                            rs.getString("email"),
+                            rs.getString("login"),
+                            rs.getString("name"),
+                            rs.getDate("birthday").toLocalDate(),
+                            null),
+                    userId
+            );
+        } else {
+            return null;
+        }
     }
 
 
@@ -89,7 +131,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     private User mapRowToUser(ResultSet rs) throws SQLException {
-        String sqlQuery = "select user_id from friend where friend_id = ?";
+        String sqlQuery = "select user_id from friends where friend_id = ?";
         Set<Long> friends = new HashSet<>(jdbcTemplate.queryForList(sqlQuery, Long.class, rs.getInt("id")));
         return User.builder()
                 .id(rs.getLong("id"))

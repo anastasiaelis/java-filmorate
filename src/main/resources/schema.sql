@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS film_like (
     user_id INTEGER REFERENCES users (id),
     PRIMARY KEY(film_id, user_id)
 );
-CREATE TABLE IF NOT EXISTS friend (
+CREATE TABLE IF NOT EXISTS friends (
     user_id INTEGER REFERENCES users (id),
     friend_id INTEGER REFERENCES users (id),
     PRIMARY KEY(user_id, friend_id)
