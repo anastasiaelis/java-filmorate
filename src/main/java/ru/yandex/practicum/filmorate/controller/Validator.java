@@ -10,7 +10,6 @@ import java.time.Month;
 @Slf4j
 public class Validator {
 
-
     public static void validateFilm(Film film) {
         if (film.getName() == null || film.getName().isBlank()) {
             log.error("Название фильма пустое");
@@ -48,19 +47,4 @@ public class Validator {
             throw new ValidationException("Дата рождения не может быть в будущем");
         }
     }
-
-  /*  public static void validateFilm(Film film) {
-        if (film.getReleaseDate().isBefore(LocalDate.of(1895, Month.DECEMBER, 28))) {
-            log.error("Дата релиза фильма раньше допустимого порога");
-            throw new ValidationException("Дата релиза не должна быть ранее 28.12.1895");
-        }
-    }
-
-    public static void validateUser(User user) {
-        if (user.getName() == null || user.getName().isBlank() ||
-                user.getName().contains(" ") || user.getLogin().contains(" ")) {
-            user.setName(user.getLogin());
-            log.info("Имя пользователя пустое, будет использован логин");
-        }
-    }*/
 }

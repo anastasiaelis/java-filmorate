@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
@@ -15,6 +14,7 @@ import java.util.Set;
 @Slf4j
 @Service
 public class UserService {
+
     private final UserStorage storage;
 
     @Autowired
@@ -27,10 +27,6 @@ public class UserService {
     }
 
     public User update(User user) {
-        if (getUserById(user.getId()) == null) {
-            log.error("Пользователь c id={} не найден", user.getId());
-            throw new UserNotFoundException(String.format("Пользователь с id=%d не найден", user.getId()));
-        }
         return storage.update(user);
     }
 
@@ -44,15 +40,17 @@ public class UserService {
 
     public void addToFriendsList(long userId1, long userId2) {
         storage.getUserById(userId2);
-        storage.getUserById(userId1).getFriends().add(userId2);
-        //storage.getUserById(userId2).getFriends().add(userId1);
-        log.info("Пользователи {} и {} теперь друзья", userId1, userId2);
+        User user = storage.getUserById(userId1);
+        user.getFriends().add(userId2);
+        log.info("Пользователь {} добавил в друзья пользователя {}", userId1, userId2);
+        storage.update(user);
     }
 
     public void deleteFromFriendsList(long userId1, long userId2) {
-        storage.getUserById(userId2).getFriends().remove(userId1);
-       // storage.getUserById(userId1).getFriends().remove(userId2);
-        log.info("Пользователи {} и {} больше не друзья", userId1, userId2);
+        User user = storage.getUserById(userId1);
+        user.getFriends().remove(userId2);
+        log.info("Пользователь {} удалил из друзей пользователя {}", userId1, userId2);
+        storage.update(user);
     }
 
     public List<User> getFriends(long id) {

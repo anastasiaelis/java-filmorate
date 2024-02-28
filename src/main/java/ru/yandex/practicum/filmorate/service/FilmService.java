@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class FilmService {
+
     private final FilmStorage storage;
     private final UserService userService;
 
@@ -29,7 +30,14 @@ public class FilmService {
     }
 
     public Film update(Film film) {
-        if (getFilmById(film.getId()) == null) {
+        boolean isPresent = false;
+        for (Film filmInStorage : storage.get()) {
+            if (filmInStorage.getId() == film.getId()) {
+                isPresent = true;
+                break;
+            }
+        }
+        if (!isPresent) {
             log.error("Фильм c id={} не найден", film.getId());
             throw new FilmNotFoundException(String.format("Фильм с id=%d не найден", film.getId()));
         }
@@ -46,18 +54,21 @@ public class FilmService {
 
     public void addLike(int filmId, long userId) {
         userService.getUserById(userId);
-        storage.getFilmById(filmId).getLikes().add(userId);
+        Film film = storage.getFilmById(filmId);
+        film.getLikes().add(userId);
         log.info("Пользователь {} поставил лайк фильму {}", userId, filmId);
+        storage.update(film);
     }
 
     public void removeLike(int filmId, long userId) {
         userService.getUserById(userId);
-        storage.getFilmById(filmId).getLikes().remove(userId);
+        Film film = storage.getFilmById(filmId);
+        film.getLikes().remove(userId);
         log.info("Пользователь {} удалил лайк фильма {}", userId, filmId);
+        storage.update(film);
     }
 
     public List<Film> getPopularMovies(int count) {
-        log.info("получен запрос на список популярных фильмов");
         return storage.get()
                 .stream()
                 .sorted(Comparator.comparing(Film::numberOfLikes).reversed())

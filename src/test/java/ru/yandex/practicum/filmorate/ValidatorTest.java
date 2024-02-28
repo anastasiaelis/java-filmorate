@@ -20,7 +20,7 @@ public class ValidatorTest {
     @DisplayName("Film без имени")
     @Test
     public void createFilmWithNoName() {
-        Film film = new Film(null, "description", LocalDate.of(2000, 1, 1),
+        Film film = new Film(1,null, "description", LocalDate.of(2000, 1, 1),
                 120, new HashSet<>(), new Mpa(1, "Комедия"), new HashSet<>());
         ValidationException e = assertThrows(ValidationException.class, () -> Validator.validateFilm(film));
     }
@@ -28,7 +28,7 @@ public class ValidatorTest {
     @DisplayName("Film с длинным описанием")
     @Test
     public void createFilmWithTooBigDescription() {
-        Film film = new Film("name", "description".repeat(50), LocalDate.of(2000, 1, 1),
+        Film film = new Film(1,"name", "description".repeat(50), LocalDate.of(2000, 1, 1),
                 120, new HashSet<>(), new Mpa(1, "Комедия"), new HashSet<>());
         ValidationException e = assertThrows(ValidationException.class, () -> Validator.validateFilm(film));
         assertEquals("Описание фильма не может превышать 200 символов", e.getMessage());
@@ -37,7 +37,7 @@ public class ValidatorTest {
     @DisplayName("Film со слишком ранней датой")
     @Test
     public void createFilmWithTooEarlyReleaseDate() {
-        Film film = new Film("name", "description", LocalDate.of(1000, 1, 1),
+        Film film = new Film(1,"name", "description", LocalDate.of(1000, 1, 1),
                 120, new HashSet<>(), new Mpa(1, "Комедия"), new HashSet<>());
         ValidationException e = assertThrows(ValidationException.class, () -> Validator.validateFilm(film));
         assertEquals("Дата релиза не должна быть ранее 28.12.1895", e.getMessage());
@@ -46,7 +46,7 @@ public class ValidatorTest {
     @DisplayName("Film с неположительной продолжительностью")
     @Test
     public void createFilmWithoutPositiveDuration() {
-        Film film = new Film("name", "description", LocalDate.of(2000, 1, 1),
+        Film film = new Film(2,"name", "description", LocalDate.of(2000, 1, 1),
                 -1, new HashSet<>(), new Mpa(1, "Комедия"), new HashSet<>());
         ValidationException e = assertThrows(ValidationException.class, () -> Validator.validateFilm(film));
         assertEquals("Продолжительность фильма должна быть положительна", e.getMessage());
