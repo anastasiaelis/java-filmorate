@@ -67,77 +67,77 @@ public class UserDbStorage implements UserStorage {
     }
 
 
-public void deleteFriend(Long userId, Long friendId) {
-    User user = getUserById(userId);
-    User friend = getUserById(friendId);
-    if ((user != null) && (friend != null)) {
-        String sql = "DELETE FROM friends WHERE user_id = ? AND friend_id = ?";
-        jdbcTemplate.update(sql, userId, friendId);
-        if (friend.getFriends().contains(userId)) {
-            // дружба стала невзаимной - нужно поменять статус
-            sql = "UPDATE friends SET user_id = ? AND friend_id = ? AND status = ? " +
-                    "WHERE user_id = ? AND friend_id = ?";
-            jdbcTemplate.update(sql, friendId, userId, false, friendId, userId);
+    public void deleteFriend(Long userId, Long friendId) {
+        User user = getUserById(userId);
+        User friend = getUserById(friendId);
+        if ((user != null) && (friend != null)) {
+            String sql = "DELETE FROM friends WHERE user_id = ? AND friend_id = ?";
+            jdbcTemplate.update(sql, userId, friendId);
+            if (friend.getFriends().contains(userId)) {
+                // дружба стала невзаимной - нужно поменять статус
+                sql = "UPDATE friends SET user_id = ? AND friend_id = ? AND status = ? " +
+                        "WHERE user_id = ? AND friend_id = ?";
+                jdbcTemplate.update(sql, friendId, userId, false, friendId, userId);
+            }
         }
     }
-}
 
-public List<User> getFriends(Long userId) {
-    User user = getUserById(userId);
-    if (user != null) {
-        String sql = "SELECT friend_id, email, login, name, birthday FROM friends" +
-                " INNER JOIN users ON friends.friend_id = users.id WHERE friends.user_id = ?";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> new User(
-                        rs.getLong("friend_id"),
-                        rs.getString("email"),
-                        rs.getString("login"),
-                        rs.getString("name"),
-                        rs.getDate("birthday").toLocalDate(),
-                        null),
-                userId
-        );
-    } else {
-        return null;
+    public List<User> getFriends(Long userId) {
+        User user = getUserById(userId);
+        if (user != null) {
+            String sql = "SELECT friend_id, email, login, name, birthday FROM friends" +
+                    " INNER JOIN users ON friends.friend_id = users.id WHERE friends.user_id = ?";
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new User(
+                            rs.getLong("friend_id"),
+                            rs.getString("email"),
+                            rs.getString("login"),
+                            rs.getString("name"),
+                            rs.getDate("birthday").toLocalDate(),
+                            null),
+                    userId
+            );
+        } else {
+            return null;
+        }
     }
-}
 
 
-@Override
-public List<User> get() {
-    String sqlQuery = "select * from users";
-    return jdbcTemplate.query(sqlQuery, (rs, rowNum) -> mapRowToUser(rs));
-}
-
-@Override
-public User getUserById(long id) {
-    String sqlQuery = "select * from users where id = ?";
-    List<User> users = jdbcTemplate.query(sqlQuery, (rs, rowNum) -> mapRowToUser(rs), id);
-    if (users.size() != 1) {
-        log.error("Пользователь c id={} не найден", id);
-        throw new UserNotFoundException(String.format("Пользователь с id=%d не найден", id));
+    @Override
+    public List<User> get() {
+        String sqlQuery = "select * from users";
+        return jdbcTemplate.query(sqlQuery, (rs, rowNum) -> mapRowToUser(rs));
     }
-    return users.get(0);
-}
 
-private Map<String, Object> userToMap(User user) {
-    Map<String, Object> values = new HashMap<>();
-    values.put("email", user.getEmail());
-    values.put("login", user.getLogin());
-    values.put("name", user.getName());
-    values.put("birthday", user.getBirthday());
-    return values;
-}
+    @Override
+    public User getUserById(long id) {
+        String sqlQuery = "select * from users where id = ?";
+        List<User> users = jdbcTemplate.query(sqlQuery, (rs, rowNum) -> mapRowToUser(rs), id);
+        if (users.size() != 1) {
+            log.error("Пользователь c id={} не найден", id);
+            throw new UserNotFoundException(String.format("Пользователь с id=%d не найден", id));
+        }
+        return users.get(0);
+    }
 
-private User mapRowToUser(ResultSet rs) throws SQLException {
-    String sqlQuery = "select user_id from friends where friend_id = ?";
-    Set<Long> friends = new HashSet<>(jdbcTemplate.queryForList(sqlQuery, Long.class, rs.getInt("id")));
-    return User.builder()
-            .id(rs.getLong("id"))
-            .email(rs.getString("email"))
-            .login(rs.getString("login"))
-            .name(rs.getString("name"))
-            .birthday(rs.getDate("birthday").toLocalDate())
-            .friends(friends)
-            .build();
-}
+    private Map<String, Object> userToMap(User user) {
+        Map<String, Object> values = new HashMap<>();
+        values.put("email", user.getEmail());
+        values.put("login", user.getLogin());
+        values.put("name", user.getName());
+        values.put("birthday", user.getBirthday());
+        return values;
+    }
+
+    private User mapRowToUser(ResultSet rs) throws SQLException {
+        String sqlQuery = "select user_id from friends where friend_id = ?";
+        Set<Long> friends = new HashSet<>(jdbcTemplate.queryForList(sqlQuery, Long.class, rs.getInt("id")));
+        return User.builder()
+                .id(rs.getLong("id"))
+                .email(rs.getString("email"))
+                .login(rs.getString("login"))
+                .name(rs.getString("name"))
+                .birthday(rs.getDate("birthday").toLocalDate())
+                .friends(friends)
+                .build();
+    }
 }

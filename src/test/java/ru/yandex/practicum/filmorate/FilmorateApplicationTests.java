@@ -5,7 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
@@ -16,6 +18,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -53,11 +56,14 @@ class FilmorateApplicationTests {
         Film film1 = new Film("name1", "description1", LocalDate.of(2000, 1, 1),
                 100, new HashSet<>(), new Mpa(1, "G"), new HashSet<>());
         filmStorage.create(film1);
+
         assertEquals(new Film(1, "name1", "description1", LocalDate.of(2000, 1, 1),
                 100, new HashSet<>(), new Mpa(1, "G"), new HashSet<>()), filmStorage.getFilmById(1));
+
         Film updatedFilm = new Film(1, "newname1", "newdescription1", LocalDate.of(2001, 1, 1),
                 101, new HashSet<>(), new Mpa(2, "PG"), new HashSet<>());
         filmStorage.update(updatedFilm);
+
         assertEquals(updatedFilm, filmStorage.getFilmById(updatedFilm.getId()));
         Film film2 = new Film("name2", "description2", LocalDate.of(2002, 1, 1),
                 102, new HashSet<>(), new Mpa(1, "G"), new HashSet<>());
@@ -68,4 +74,5 @@ class FilmorateApplicationTests {
                 LocalDate.of(2002, 1, 1), 102, new HashSet<>(),
                 new Mpa(1, "G"), new HashSet<>())), filmStorage.get());
     }
+
 }
