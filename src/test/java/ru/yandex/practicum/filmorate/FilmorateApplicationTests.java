@@ -53,7 +53,7 @@ class FilmorateApplicationTests {
     @DisplayName("Действия с фильмами")
     @Test
     public void interactWithFilmsTest() {
-        Film film1 = new Film(1,"name1", "description1", LocalDate.of(2000, 1, 1),
+        Film film1 = new Film(1, "name1", "description1", LocalDate.of(2000, 1, 1),
                 100, new HashSet<>(), new Mpa(1, "G"), new HashSet<>());
         filmStorage.create(film1);
 
@@ -65,7 +65,7 @@ class FilmorateApplicationTests {
         filmStorage.update(updatedFilm);
 
         assertEquals(updatedFilm, filmStorage.getFilmById(updatedFilm.getId()));
-        Film film2 = new Film(2,"name2", "description2", LocalDate.of(2002, 1, 1),
+        Film film2 = new Film(2, "name2", "description2", LocalDate.of(2002, 1, 1),
                 102, new HashSet<>(), new Mpa(1, "G"), new HashSet<>());
         filmStorage.create(film2);
         assertEquals(List.of(new Film(1, "newname1", "newdescription1",
