@@ -42,7 +42,4 @@ public class User {
         this.birthday = birthday;
         this.friends = friends;
     }
-
-    public User() {
-    }
 }

@@ -12,7 +12,6 @@ import java.util.List;
 @Slf4j
 @Component
 public class GenreDbStorage implements GenreStorage {
-
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired

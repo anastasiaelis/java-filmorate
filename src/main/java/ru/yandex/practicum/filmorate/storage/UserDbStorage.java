@@ -51,62 +51,6 @@ public class UserDbStorage implements UserStorage {
         return getUserById(user.getId());
     }
 
-    // @Override
-
-    public void addFriend(Long userId, Long friendId) {
-        User user = getUserById(userId);
-        User friend = getUserById(friendId);
-
-        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("friendship")
-                .usingGeneratedKeyColumns("user_id");
-        long id = simpleJdbcInsert.executeAndReturnKey(userToMap(user)).longValue();
-
-        if ((user != null) && (friend != null)) {
-
-            String sql = "UPDATE friends SET user_id = ? AND friend_id = ?" +
-                    "WHERE user_id = ? AND friend_id = ?";
-            jdbcTemplate.update(sql, friendId, userId, true, friendId, userId);
-        }
-        String sql = "INSERT INTO friends (user_id, friend_id) VALUES (?, ?)";
-        jdbcTemplate.update(sql, userId, friendId);
-    }
-
-
-    public void deleteFriend(Long userId, Long friendId) {
-        User user = getUserById(userId);
-        User friend = getUserById(friendId);
-        if ((user != null) && (friend != null)) {
-            String sql = "DELETE FROM friends WHERE user_id = ? AND friend_id = ?";
-            jdbcTemplate.update(sql, userId, friendId);
-            if (friend.getFriends().contains(userId)) {
-                // дружба стала невзаимной - нужно поменять статус
-                sql = "UPDATE friends SET user_id = ? AND friend_id = ? AND status = ? " +
-                        "WHERE user_id = ? AND friend_id = ?";
-                jdbcTemplate.update(sql, friendId, userId, false, friendId, userId);
-            }
-        }
-    }
-
-    public List<User> getFriends(Long userId) {
-        User user = getUserById(userId);
-        if (user != null) {
-            String sql = "SELECT friend_id, email, login, name, birthday FROM friends" +
-                    " INNER JOIN users ON friends.friend_id = users.id WHERE friends.user_id = ?";
-            return jdbcTemplate.query(sql, (rs, rowNum) -> new User(
-                            rs.getLong("friend_id"),
-                            rs.getString("email"),
-                            rs.getString("login"),
-                            rs.getString("name"),
-                            rs.getDate("birthday").toLocalDate(),
-                            null),
-                    userId
-            );
-        } else {
-            return null;
-        }
-    }
-
 
     @Override
     public List<User> get() {
