@@ -18,7 +18,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -71,5 +70,4 @@ class FilmorateApplicationTests {
                 LocalDate.of(2002, 1, 1), 102, new HashSet<>(),
                 new Mpa(1, "G"), new HashSet<>())), filmStorage.get());
     }
-
 }
