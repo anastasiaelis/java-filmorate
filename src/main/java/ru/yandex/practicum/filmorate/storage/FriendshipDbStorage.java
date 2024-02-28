@@ -3,10 +3,11 @@ package ru.yandex.practicum.filmorate.storage;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.storage.friendship.FriendshipStorage;
+
 import java.util.List;
 
 @Component
-public class FriendshipDbStorage implements FriendshipStorage{
+public class FriendshipDbStorage implements FriendshipStorage {
     private final JdbcTemplate jdbcTemplate;
 
     public FriendshipDbStorage(JdbcTemplate jdbcTemplate) {
