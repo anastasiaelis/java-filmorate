@@ -56,6 +56,12 @@ public class UserDbStorage implements UserStorage {
     public void addFriend(Long userId, Long friendId) {
         User user = getUserById(userId);
         User friend = getUserById(friendId);
+
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("friends")
+                .usingGeneratedKeyColumns("id");
+        long id = simpleJdbcInsert.executeAndReturnKey(userToMap(user)).longValue();
+
         if ((user != null) && (friend != null)) {
 
             String sql = "UPDATE friends SET user_id = ? AND friend_id = ?" +
