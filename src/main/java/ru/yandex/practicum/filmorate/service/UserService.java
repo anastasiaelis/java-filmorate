@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FriendshipStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,14 +58,15 @@ public class UserService {
 //        storage.update(user);
 //    }
 //
-//    public List<User> getFriends(long id) {
-//        List<User> friends = new ArrayList<>();
-//        for (Long number : storage.getUserById(id).getFriends()) {
-//            friends.add(storage.getUserById(number));
-//        }
-//        return friends;
-//    }
-//
+    public List<User> getFriends(long id) {
+        List<User> friends = new ArrayList<>();
+        for (Long number : storage.getUserById(id).getFriends()) {
+            friends.add(storage.getUserById(number));
+        }
+        return friends;
+    }
+
+    //
 //    public List<User> getCommonFriends(long userId1, long userId2) {
 //        List<User> friends = new ArrayList<>();
 //        Set<Long> result = new java.util.HashSet<>(Set.copyOf(storage.getUserById(userId1).getFriends()));
@@ -75,7 +77,7 @@ public class UserService {
 //        return friends;
 //    }
 //@Override
-    public List<User> listOfMutualFriends(long id, long otherId) { //вывод списка общих друзей
+    public List<User> getCommonFriends(long id, long otherId) { //вывод списка общих друзей
         getUserById(id);
         getUserById(otherId);
         log.info("Получен список общих друзей пользователей с id {} и id {} ", id, otherId);
@@ -86,7 +88,7 @@ public class UserService {
     }
 
     /// @Override
-    public Collection<Long> addFriend(long userId, long friendId) {  //добавление в друзья
+    public Collection<Long> addToFriendsList(long userId, long friendId) {  //добавление в друзья
         getUserById(userId);
         getUserById(friendId);
         boolean userFriendOne = friendshipStorage.allUsersFriends(userId).contains(friendId);
@@ -104,7 +106,7 @@ public class UserService {
     }
 
     //@Override
-    public void deleteFriend(long userId, long friendId) {  //удаление из друзей
+    public void deleteFromFriendsList(long userId, long friendId) {  //удаление из друзей
         getUserById(userId);
         getUserById(friendId);
         boolean isUserFriendOne = friendshipStorage.allUsersFriends(userId).contains(friendId);
