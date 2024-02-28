@@ -28,7 +28,7 @@ public class UserDbStorage implements UserStorage {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("users")
                 .usingGeneratedKeyColumns("id");
-        long id =simpleJdbcInsert.executeAndReturnKey(userToMap(user)).longValue();
+        long id = simpleJdbcInsert.executeAndReturnKey(userToMap(user)).longValue();
         log.info("Пользователь {} был создан", id);
         return getUserById(id);
     }
