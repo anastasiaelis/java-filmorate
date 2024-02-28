@@ -37,6 +37,19 @@ public class Film {
         this.genres = genres;
     }
 
+    public Film(String name, String description, LocalDate releaseDate, int duration, Set<Long> likes, Mpa mpa, Set<Genre> genres) {
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.likes = likes;
+        this.mpa = mpa;
+        this.genres = genres;
+    }
+
+    public Film() {
+    }
+
     public int numberOfLikes() {
         return likes.size();
     }

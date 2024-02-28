@@ -43,6 +43,21 @@ public class UserService {
         return storage.getUserById(id);
     }
 
+    //    public void addToFriendsList(long userId1, long userId2) {
+//        storage.getUserById(userId2);
+//        User user = storage.getUserById(userId1);
+//        user.getFriends().add(userId2);
+//        log.info("Пользователь {} добавил в друзья пользователя {}", userId1, userId2);
+//        storage.update(user);
+//    }
+//
+//    public void deleteFromFriendsList(long userId1, long userId2) {
+//        User user = storage.getUserById(userId1);
+//        user.getFriends().remove(userId2);
+//        log.info("Пользователь {} удалил из друзей пользователя {}", userId1, userId2);
+//        storage.update(user);
+//    }
+//
     public List<User> getFriends(long id) {
         List<User> friends = new ArrayList<>();
         for (Long number : storage.getUserById(id).getFriends()) {
@@ -51,6 +66,17 @@ public class UserService {
         return friends;
     }
 
+    //
+//    public List<User> getCommonFriends(long userId1, long userId2) {
+//        List<User> friends = new ArrayList<>();
+//        Set<Long> result = new java.util.HashSet<>(Set.copyOf(storage.getUserById(userId1).getFriends()));
+//        result.retainAll(storage.getUserById(userId2).getFriends());
+//        for (Long number : result) {
+//            friends.add(storage.getUserById(number));
+//        }
+//        return friends;
+//    }
+//@Override
     public List<User> getCommonFriends(long id, long otherId) { //вывод списка общих друзей
         getUserById(id);
         getUserById(otherId);
@@ -61,6 +87,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    /// @Override
     public Collection<Long> addToFriendsList(long userId, long friendId) {  //добавление в друзья
         getUserById(userId);
         getUserById(friendId);
@@ -78,6 +105,7 @@ public class UserService {
         return friendshipStorage.allUsersFriends(userId);
     }
 
+    //@Override
     public void deleteFromFriendsList(long userId, long friendId) {  //удаление из друзей
         getUserById(userId);
         getUserById(friendId);
@@ -95,4 +123,21 @@ public class UserService {
             }
         }
     }
+
+//    private void validateBeforeAdd(User user) {
+//        if (user.getLogin().contains(" ")) {
+//            log.error("Логин не может содержать пробелы");
+//            throw new ValidationException("Логин не может содержать пробелы");
+//        }
+//        for (User user1 : usersList()) {
+//            if (user1.getEmail().equals(user.getEmail())) {
+//                log.error("Пользователь с email = {} уже существует", user.getEmail());
+//                throw new ValidationException(format("Пользователь с email = %s уже существует", user.getEmail()));
+//            }
+//            if (user1.getLogin().equals(user.getLogin())) {
+//                log.error("Пользователь с login = {} уже существует", user.getLogin());
+//                throw new ValidationException(format("Пользователь с login = %s уже существует", user.getLogin()));
+//            }
+//        }
+//    }
 }
