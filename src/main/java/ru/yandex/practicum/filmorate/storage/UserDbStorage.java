@@ -68,6 +68,7 @@ public class UserDbStorage implements UserStorage {
         }
         return users.get(0);
     }
+
     public void addFriend(Long userId, Long friendId) {
         User user = getUserById(userId);
         User friend = getUserById(friendId);
@@ -121,6 +122,7 @@ public class UserDbStorage implements UserStorage {
             return null;
         }
     }
+
     private Map<String, Object> userToMap(User user) {
         Map<String, Object> values = new HashMap<>();
         values.put("email", user.getEmail());
