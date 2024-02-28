@@ -51,23 +51,7 @@ public class UserDbStorage implements UserStorage {
         return getUserById(user.getId());
     }
 
-
-    @Override
-    public List<User> get() {
-        String sqlQuery = "select * from users";
-        return jdbcTemplate.query(sqlQuery, (rs, rowNum) -> mapRowToUser(rs));
-    }
-
-    @Override
-    public User getUserById(long id) {
-        String sqlQuery = "select * from users where id = ?";
-        List<User> users = jdbcTemplate.query(sqlQuery, (rs, rowNum) -> mapRowToUser(rs), id);
-        if (users.size() != 1) {
-            log.error("Пользователь c id={} не найден", id);
-            throw new UserNotFoundException(String.format("Пользователь с id=%d не найден", id));
-        }
-        return users.get(0);
-    }
+    // @Override
 
     public void addFriend(Long userId, Long friendId) {
         User user = getUserById(userId);
@@ -121,6 +105,24 @@ public class UserDbStorage implements UserStorage {
         } else {
             return null;
         }
+    }
+
+
+    @Override
+    public List<User> get() {
+        String sqlQuery = "select * from users";
+        return jdbcTemplate.query(sqlQuery, (rs, rowNum) -> mapRowToUser(rs));
+    }
+
+    @Override
+    public User getUserById(long id) {
+        String sqlQuery = "select * from users where id = ?";
+        List<User> users = jdbcTemplate.query(sqlQuery, (rs, rowNum) -> mapRowToUser(rs), id);
+        if (users.size() != 1) {
+            log.error("Пользователь c id={} не найден", id);
+            throw new UserNotFoundException(String.format("Пользователь с id=%d не найден", id));
+        }
+        return users.get(0);
     }
 
     private Map<String, Object> userToMap(User user) {
