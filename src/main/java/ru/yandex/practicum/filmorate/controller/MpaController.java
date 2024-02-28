@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/mpa")
 public class MpaController {
-
     private final MpaStorage storage;
 
     @Autowired
