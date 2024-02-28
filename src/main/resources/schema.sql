@@ -31,8 +31,12 @@ CREATE TABLE IF NOT EXISTS film_like (
     user_id INTEGER REFERENCES users (id),
     PRIMARY KEY(film_id, user_id)
 );
-CREATE TABLE IF NOT EXISTS friends (
-    user_id INTEGER REFERENCES users (id),
-    friend_id INTEGER REFERENCES users (id),
-    PRIMARY KEY(user_id, friend_id)
-)
+create table IF NOT EXISTS friendship
+(
+    user_id   INTEGER not null
+    references users (id) ON DELETE CASCADE,
+    friend_id INTEGER not null
+    references users (id) ON DELETE CASCADE,
+    STATUS    BOOLEAN not null,
+    primary key (user_id, friend_id)
+    );
