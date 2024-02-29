@@ -12,7 +12,6 @@ import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.*;
 
 @Slf4j
@@ -96,25 +95,26 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private Film mapRowToFilm(ResultSet rs) throws SQLException {
-        int id = (int) rs.getLong("id");
-        String name = rs.getString("name");
-        String description = rs.getString("description");
-        LocalDate releaseDate = rs.getDate("release_date").toLocalDate();
-        int duration = rs.getInt("duration");
-        int mpaId = rs.getInt("mpa_id");
-        String mpaName = rs.getString("name");
-        Mpa mpa = Mpa.builder()
-                .id(mpaId)
-                .name(mpaName)
-                .build();
-
+        String sqlQuery = "select user_id from film_like where film_id = ?";
+        Set<Long> likes = new HashSet<>(jdbcTemplate.queryForList(sqlQuery, Long.class, rs.getInt("id")));
+        sqlQuery = "select name from mpa where id = ?";
+        String mpaName = jdbcTemplate.queryForObject(sqlQuery, String.class, rs.getInt("mpa_id"));
+        sqlQuery = "select genre_id from film_genre where film_id = ? order by genre_id";
+        Set<Integer> genresId = Set.copyOf(jdbcTemplate.queryForList(sqlQuery, Integer.class, rs.getInt("id")));
+        Set<Genre> genres = new TreeSet<>(Comparator.comparingInt(Genre::getId));
+        sqlQuery = "select name from genre where id = ?";
+        for (Integer id : genresId) {
+            genres.add(new Genre(id, jdbcTemplate.queryForObject(sqlQuery, String.class, id)));
+        }
         return Film.builder()
-                .id(id)
-                .name(rs.getString(name))
-                .description(rs.getString(description))
-                .releaseDate(releaseDate)
-                .duration(rs.getInt(duration))
-                .mpa(mpa)
+                .id(rs.getInt("id"))
+                .name(rs.getString("name"))
+                .description(rs.getString("description"))
+                .releaseDate(rs.getDate("release_date").toLocalDate())
+                .duration(rs.getInt("duration"))
+                .likes(likes)
+                .mpa(new Mpa(rs.getInt("mpa_id"), mpaName))
+                .genres(genres)
                 .build();
     }
 }
