@@ -30,14 +30,8 @@ public class FilmService {
     }
 
     public Film update(Film film) {
-        boolean isPresent = false;
-        for (Film filmInStorage : storage.get()) {
-            if (filmInStorage.getId() == film.getId()) {
-                isPresent = true;
-                break;
-            }
-        }
-        if (!isPresent) {
+
+        if (getFilmById(film.getId())==null) {
             log.error("Фильм c id={} не найден", film.getId());
             throw new FilmNotFoundException(String.format("Фильм с id=%d не найден", film.getId()));
         }

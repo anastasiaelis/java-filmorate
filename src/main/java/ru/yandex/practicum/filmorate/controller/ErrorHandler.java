@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.model.ErrorResponse;
 
 @Slf4j
 
-@RestControllerAdvice("ru.yandex.practicum.filmorate.controller")
+@RestControllerAdvice
 public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
