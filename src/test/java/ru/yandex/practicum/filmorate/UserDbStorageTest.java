@@ -34,4 +34,4 @@ class UserDbStorageTest {
                 .usingRecursiveComparison() // проверяем, что значения полей нового
                 .isEqualTo(newUser);        // и сохраненного пользователя - совпадают
     }
-} 
+}
