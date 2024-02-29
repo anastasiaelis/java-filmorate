@@ -40,6 +40,7 @@ public class GenreDbStorage implements GenreStorage {
         }
         return genres.get(0);
     }
+
     public List<Genre> getGenresByFilm(long id) {
         String sql = "SELECT g.* FROM film_genre AS fg JOIN genre AS g ON" +
                 " fg.genre_id = g.genre_id WHERE fg.film_id = ? ORDER BY g.genre_id";
