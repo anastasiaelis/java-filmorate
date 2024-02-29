@@ -31,7 +31,7 @@ public class FilmService {
 
     public Film update(Film film) {
 
-        if (getFilmById(film.getId())==null) {
+        if (getFilmById(film.getId()) == null) {
             log.error("Фильм c id={} не найден", film.getId());
             throw new FilmNotFoundException(String.format("Фильм с id=%d не найден", film.getId()));
         }
