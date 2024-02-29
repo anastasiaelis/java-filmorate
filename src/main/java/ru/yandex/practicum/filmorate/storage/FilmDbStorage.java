@@ -44,22 +44,11 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film update(Film film) {
-        getFilmById(film.getId());
-        String sqlQuery = "update film set name = ?, description = ?, release_date = ?, duration = ?, mpa_id = ? where id = ?";
-        jdbcTemplate.update(sqlQuery, film.getName(), film.getDescription(), film.getReleaseDate(),
-                film.getDuration(), film.getMpa().getId(), film.getId());
-        sqlQuery = "delete from film_like where film_id = ?";
-        jdbcTemplate.update(sqlQuery, film.getId());
-        if (film.getLikes() != null && !film.getLikes().isEmpty()) {
-            sqlQuery = "insert into film_like (film_id, user_id) values (?, ?)";
-            for (Long id : film.getLikes()) {
-                jdbcTemplate.update(sqlQuery, film.getId(), id);
-            }
-        }
-        sqlQuery = "delete from film_genre where film_id = ?";
-        jdbcTemplate.update(sqlQuery, film.getId());
+        String sql = "UPDATE films SET " +
+                "film_name = ?, film_description = ?, release_date = ?, duration = ?, mpa_id = ?" +
+                " WHERE film_id = ?";
         if (film.getGenres() != null && !film.getGenres().isEmpty()) {
-            sqlQuery = "insert into film_genre (film_id, genre_id) values (?, ?)";
+            String sqlQuery = "insert into film_genre (film_id, genre_id) values (?, ?)";
             for (Genre genre : film.getGenres()) {
                 jdbcTemplate.update(sqlQuery, film.getId(), genre.getId());
             }
@@ -103,7 +92,7 @@ public class FilmDbStorage implements FilmStorage {
         int duration = rs.getInt("duration");
         int mpaId = rs.getInt("mpa_id");
         String mpaName = rs.getString("name");
-        Mpa mpa = Mpa.builder()
+        Mpa mpav = Mpa.builder()
                 .id(mpaId)
                 .name(mpaName)
                 .build();
@@ -114,7 +103,7 @@ public class FilmDbStorage implements FilmStorage {
                 .description(rs.getString(description))
                 .releaseDate(releaseDate)
                 .duration(rs.getInt(duration))
-                .mpa(mpa)
+                .mpa(mpav)
                 .build();
     }
 }
