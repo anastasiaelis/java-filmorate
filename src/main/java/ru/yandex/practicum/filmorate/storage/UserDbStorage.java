@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Slf4j
-@Component("UserDbStorage")
+@Component//("UserDbStorage")
 public class UserDbStorage implements UserStorage {
 
     private final JdbcTemplate jdbcTemplate;
