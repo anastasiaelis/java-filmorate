@@ -107,7 +107,7 @@ public class FilmDbStorage implements FilmStorage {
 
         return Film.builder()
                 .id(id)
-                .name(rs.getString("name"))
+                .name(name)
                 .description(rs.getString("description"))
                 .releaseDate(rs.getDate("release_date").toLocalDate())
                 .duration(rs.getInt("duration"))
