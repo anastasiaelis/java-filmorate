@@ -103,7 +103,6 @@ public class FilmDbStorage implements FilmStorage {
                 .description(description)
                 .releaseDate(releaseDate)
                 .duration(duration)
-                .mpa(mpav)
                 .build();
     }
 }
