@@ -12,6 +12,7 @@ import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.*;
 
 @Slf4j
@@ -84,15 +85,35 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private Film mapRowToFilm(ResultSet rs) throws SQLException {
+//        Mpa mpav = Mpa.builder()
+//                .id(rs.getInt("mpa.id"))
+//                .build();
+//        return Film.builder()
+//                .id((int) rs.getLong("id"))
+//                .name(rs.getString("name"))
+//                .description(rs.getString("description"))
+//                .releaseDate(rs.getDate("releaseDate").toLocalDate())
+//                .duration(rs.getInt("duration"))
+//                .mpa(mpav)
+//                .build();
+        int id = (int) rs.getLong("id");
+        String name = rs.getString("name");
+        String description = rs.getString("description");
+        LocalDate releaseDate = rs.getDate("release_date").toLocalDate();
+        int duration = rs.getInt("duration");
+        int mpaId = rs.getInt("mpa_id");
+        String mpaName = rs.getString("name");
         Mpa mpav = Mpa.builder()
-                .id(rs.getInt("mpa.id"))
+                .id(mpaId)
+                .name(mpaName)
                 .build();
+
         return Film.builder()
-                .id((int) rs.getLong("id"))
-                .name(rs.getString("name"))
-                .description(rs.getString("description"))
-                .releaseDate(rs.getDate("releaseDate").toLocalDate())
-                .duration(rs.getInt("duration"))
+                .id(id)
+                .name(name)
+                .description(description)
+                .releaseDate(releaseDate)
+                .duration(duration)
                 .mpa(mpav)
                 .build();
     }
