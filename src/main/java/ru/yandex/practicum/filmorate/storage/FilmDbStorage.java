@@ -96,12 +96,12 @@ public class FilmDbStorage implements FilmStorage {
 //                .duration(rs.getInt("duration"))
 //                .mpa(mpav)
 //                .build();
-        int id = (int) rs.getLong("id");
+       // int id = ;
         String name = rs.getString("name");
         String description = rs.getString("description");
         LocalDate releaseDate = rs.getDate("release_date").toLocalDate();
         int duration = rs.getInt("duration");
-        int mpaId = rs.getInt("mpa_id");
+        int mpaId = rs.getInt("mpa.id");
         String mpaName = rs.getString("name");
         Mpa mpav = Mpa.builder()
                 .id(mpaId)
@@ -109,7 +109,7 @@ public class FilmDbStorage implements FilmStorage {
                 .build();
 
         return Film.builder()
-                .id(id)
+                .id((int) rs.getLong("id"))
                 .name(name)
                 .description(description)
                 .releaseDate(releaseDate)
