@@ -12,7 +12,6 @@ import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.*;
 
 @Slf4j
@@ -94,7 +93,7 @@ public class FilmDbStorage implements FilmStorage {
         }
         String mpaName = rs.getString("name");
         Mpa mpav = Mpa.builder()
-                .id( rs.getInt("mpa.id"))
+                .id(rs.getInt("mpa.id"))
                 .name(mpaName)
                 .build();
 
