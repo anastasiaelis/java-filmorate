@@ -25,19 +25,26 @@ public class GenreDbStorage implements GenreStorage {
     @Override
     public List<Genre> get() {
         String sqlQuery = "select id, name from genre order by id";
-        return jdbcTemplate.query(sqlQuery, (rs, rowNum) ->
-                new Genre(rs.getInt("id"), rs.getString("name")));
+        return jdbcTemplate.query(sqlQuery, (rs, rowNum) -> rowMapperGenre(rs));
     }
 
     @Override
     public Genre getGenreById(int id) {
         String sqlQuery = "select id, name from genre where id = ?";
-        List<Genre> genres = jdbcTemplate.query(sqlQuery, (rs, rowNum) ->
-                new Genre(rs.getInt("id"), rs.getString("name")), id);
+        List<Genre> genres = jdbcTemplate.query(sqlQuery, (rs, rowNum) -> rowMapperGenre(rs), id);
         if (genres.size() != 1) {
             log.error("Жанр с id={} не найден", id);
             throw new GenreNotFoundException(String.format("Жанр с id=%d не найден", id));
         }
         return genres.get(0);
+    }
+
+    private Genre rowMapperGenre(ResultSet rs) throws SQLException {
+        int genreId = rs.getInt("genre_id");
+        String genreName = rs.getString("genre_name");
+        return Genre.builder()
+                .id(genreId)
+                .name(genreName)
+                .build();
     }
 }

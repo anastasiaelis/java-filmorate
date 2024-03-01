@@ -84,17 +84,8 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private Film mapRowToFilm(ResultSet rs) throws SQLException {
-        String sqlQuery = "select genre_id from film_genre where film_id = ? order by genre_id";
-        Set<Integer> genresId = Set.copyOf(jdbcTemplate.queryForList(sqlQuery, Integer.class, rs.getInt("id")));
-        Set<Genre> genres = new TreeSet<>(Comparator.comparingInt(Genre::getId));
-        sqlQuery = "select name from genre where id = ?";
-        for (Integer ids : genresId) {
-            genres.add(new Genre(ids, jdbcTemplate.queryForObject(sqlQuery, String.class, ids)));
-        }
-        String mpaName = rs.getString("name");
         Mpa mpav = Mpa.builder()
                 .id(rs.getInt("mpa.id"))
-                .name(mpaName)
                 .build();
         return Film.builder()
                 .id((int) rs.getLong("id"))
@@ -103,7 +94,6 @@ public class FilmDbStorage implements FilmStorage {
                 .releaseDate(rs.getDate("releaseDate").toLocalDate())
                 .duration(rs.getInt("duration"))
                 .mpa(mpav)
-                .genres(genres)
                 .build();
     }
 }
