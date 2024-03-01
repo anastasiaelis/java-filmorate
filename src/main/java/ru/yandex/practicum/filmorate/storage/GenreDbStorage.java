@@ -40,19 +40,4 @@ public class GenreDbStorage implements GenreStorage {
         }
         return genres.get(0);
     }
-
-    public List<Genre> getGenresByFilm(long id) {
-        String sql = "SELECT g.* FROM film_genre AS fg JOIN genre AS g ON" +
-                " fg.genre_id = g.genre_id WHERE fg.film_id = ? ORDER BY g.genre_id";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> rowMapperGenre(rs), id);
-    }
-
-    private Genre rowMapperGenre(ResultSet rs) throws SQLException {
-        int genreId = rs.getInt("genre_id");
-        String genreName = rs.getString("genre_name");
-        return Genre.builder()
-                .id(genreId)
-                .name(genreName)
-                .build();
-    }
 }
