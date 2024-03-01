@@ -99,10 +99,10 @@ public class FilmDbStorage implements FilmStorage {
 
         return Film.builder()
                 .id(id)
-                .name(rs.getString(name))
-                .description(rs.getString(description))
+                .name(name)
+                .description(description)
                 .releaseDate(releaseDate)
-                .duration(rs.getInt(duration))
+                .duration(duration)
                 .mpa(mpav)
                 .build();
     }
