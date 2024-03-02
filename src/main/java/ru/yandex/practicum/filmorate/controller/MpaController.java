@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @Validated
-@RequestMapping("/mpa")
+@RequestMapping
 public class MpaController {
     private final MpaStorage storage;
 
