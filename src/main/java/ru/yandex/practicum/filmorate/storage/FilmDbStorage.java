@@ -228,7 +228,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Genre> getAllGenres() {
-        // String sqlQuery = "SELECT * FROM genre";
+        // String  sqlQuery = "SELECT * FROM genre";
         //return jdbcTemplate.query(sqlQuery, GENRE_ROW_MAPPER);
         List<Genre> ds = new ArrayList<>();
         for (int i = 0; i < 6; i = i + 1) {
