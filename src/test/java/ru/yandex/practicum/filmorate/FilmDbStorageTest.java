@@ -29,7 +29,7 @@ class FilmDbStorageTest {
         Film newFilm = new Film(1, "useremail.ru", "vanya123", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
 
         FilmDbStorage filmStorage = new FilmDbStorage(jdbcTemplate);
-        List<Genre> c5=filmStorage.getAllGenres();
+        List<Genre> c5 = filmStorage.getAllGenres();
 
         filmStorage.create(newFilm);
         Film upFilm = new Film(1, "", "vanya123", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
