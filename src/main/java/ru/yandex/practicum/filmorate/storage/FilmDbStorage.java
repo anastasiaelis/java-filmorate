@@ -218,13 +218,6 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Genre getGenre(Integer id) {
-//        try {
-//            String sqlQuery = "SELECT * FROM genre WHERE id = ?";
-//            return jdbcTemplate.queryForObject(sqlQuery, GENRE_ROW_MAPPER, id);
-//        } catch (EmptyResultDataAccessException ex) {
-//            log.error("Фильм не найден.");
-//            throw new FilmNotFoundException("Фильм не найден.");
-//        }
         String sql = "SELECT * FROM genre WHERE id = ?";
         try {
             return jdbcTemplate.queryForObject(sql, GENRE_ROW_MAPPER, id);

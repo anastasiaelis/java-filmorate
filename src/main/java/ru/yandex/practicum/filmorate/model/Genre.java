@@ -1,18 +1,52 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import javax.validation.constraints.Positive;
+import java.util.Objects;
 
-@Data
-@AllArgsConstructor
 public class Genre {
 
-    private int id;
-    //private int genre_id;
-    private String  name;
-
+    @Positive
+    Integer id;
+    String name;
 
     public Genre() {
+    }
 
+    public Genre(Integer id) {
+        this.id = id;
+    }
+
+    public Genre(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Genre)) return false;
+        Genre genre = (Genre) o;
+        return id.equals(genre.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
