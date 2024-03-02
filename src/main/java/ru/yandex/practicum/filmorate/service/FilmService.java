@@ -46,7 +46,7 @@ public class FilmService {
         return storage.getFilmById(id);
     }
 
-    public void addLike(int filmId, long userId) {
+    public void addLike(int filmId, int userId) {
         userService.getUserById(userId);
         Film film = storage.getFilmById(filmId);
         film.getLikes().add(userId);

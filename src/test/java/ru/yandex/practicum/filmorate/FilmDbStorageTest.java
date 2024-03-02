@@ -26,15 +26,15 @@ class FilmDbStorageTest {
     public void testFindFilmById() {
         // Подготавливаем данные для теста
         Mpa apm = new Mpa(1, "G");
-        Film newFilm = new Film(1, "useremail.ru", "vanya123", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
+        Film newFilm = new Film(1, "useremail.ru", "vanya123", LocalDate.of(1990, 1, 1), 100, new ArrayList<>(), apm);
 
         FilmDbStorage filmStorage = new FilmDbStorage(jdbcTemplate);
         List<Genre> c5 = filmStorage.getAllGenres();
 
         filmStorage.create(newFilm);
-        Film upFilm = new Film(1, "", "vanya123", LocalDate.of(1990, 1, 1), 190, new HashSet<>(), apm, new ArrayList<>());
-        Film upFilm2 = new Film(2, "film2", "vmm3", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
-        Film upFilm3 = new Film(0, "film5", "vya123", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
+        Film upFilm = new Film(1, "", "vanya123", LocalDate.of(1990, 1, 1), 190, new ArrayList<>(), apm);
+        Film upFilm2 = new Film(2, "film2", "vmm3", LocalDate.of(1990, 1, 1), 100, new ArrayList<>(), apm);
+        Film upFilm3 = new Film(0, "film5", "vya123", LocalDate.of(1990, 1, 1), 100, new ArrayList<>(), apm);
         filmStorage.create(upFilm2);
         filmStorage.create(upFilm3);
         // вызываем тестируемый метод
