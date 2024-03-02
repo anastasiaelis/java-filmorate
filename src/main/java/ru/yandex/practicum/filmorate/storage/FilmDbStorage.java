@@ -8,6 +8,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.exception.MpaNotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
@@ -96,7 +98,7 @@ public class FilmDbStorage implements FilmStorage {
         });
 
         if (rowsUpdated == 0) {
-            throw new FilmNotFoundException("Unable to remove user.");
+            throw new ValidationException("Unable to remove user.");
         }
     }
 
@@ -181,7 +183,7 @@ public class FilmDbStorage implements FilmStorage {
     public List<Film> getTopLikedFilms(Integer count) {
 
         if (count != null && count < 0) {
-            throw new FilmNotFoundException("Negative value count is not allowed.");
+            throw new ValidationException("Negative value count is not allowed.");
         }
 
         String sqlQuery = "SELECT f.id as id, f.name as name, f.description as description, f.duration as duration, " +
@@ -207,7 +209,7 @@ public class FilmDbStorage implements FilmStorage {
             String sqlQuery = "SELECT id, name FROM mpas WHERE id = ?";
             return jdbcTemplate.queryForObject(sqlQuery, MPA_ROW_MAPPER, id);
         } catch (EmptyResultDataAccessException ex) {
-            throw new FilmNotFoundException("Failed to get mpa by this id.");
+            throw new MpaNotFoundException("Failed to get mpa by this id.");
         }
     }
 
