@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
@@ -55,13 +56,4 @@ public class FilmController {
     public List<Film> getPopularMovies(@RequestParam(required = false, defaultValue = "10") int count) {
         return service.getPopularMovies(count);
     }
-//    @GetMapping
-//    public List<Genre> get() {
-//        return storage.get();
-//    }
-//
-//    @GetMapping("/{id}")
-//    public Genre getGenreById(@PathVariable int id) {
-//        return storage.getGenreById(id);
-//    }
 }
