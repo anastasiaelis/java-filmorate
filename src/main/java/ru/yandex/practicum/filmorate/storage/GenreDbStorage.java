@@ -40,11 +40,11 @@ public class GenreDbStorage implements GenreStorage {
     }
 
     private Genre rowMapperGenre(ResultSet rs) throws SQLException {
-        int filmId = rs.getInt("film_id");
+        String name = rs.getString("genre_name");
         int genreId = rs.getInt("genre_id");
         return Genre.builder()
-                .film_id(filmId)
-                .genre_id(genreId)
+                .name(name)
+                .id(genreId)
                 .build();
     }
 }

@@ -234,7 +234,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private void addGenres(Integer filmId, List<Genre> genres) {
-        genres = genres.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingInt(Genre::getGenre_id))), ArrayList::new));
+        genres = genres.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingInt(Genre::getId))), ArrayList::new));
 
         String sqlQuery = "INSERT INTO film_genres(film_id, genre_id) " +
                 "VALUES (?, ?)";
@@ -242,7 +242,7 @@ public class FilmDbStorage implements FilmStorage {
             jdbcTemplate.update(connection -> {
                 PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"id"});
                 stmt.setInt(1, filmId);
-                stmt.setInt(2, genre.getGenre_id());
+                stmt.setInt(2, genre.getId());
                 return stmt;
             });
         });
@@ -260,8 +260,8 @@ public class FilmDbStorage implements FilmStorage {
     };
     private static final RowMapper<Genre> GENRE_ROW_MAPPER = (rs, rowNum) -> {
         Genre genre = new Genre();
-        genre.setGenre_id(rs.getInt("genre_id"));
-        genre.setGenre_name(rs.getString("name"));
+        genre.setId(rs.getInt("genre_id"));
+        genre.setName(rs.getString("name"));
         return genre;
     };
     private static final RowMapper<Mpa> MPA_ROW_MAPPER = (rs, rowNum) -> {
