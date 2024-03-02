@@ -5,6 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -14,47 +15,47 @@ import java.util.List;
 @RequestMapping("/films")
 public class FilmController {
 
-    private final FilmService service;
+    private final FilmStorage storage;
 
     @Autowired
-    public FilmController(FilmService service) {
-        this.service = service;
+    public FilmController(FilmStorage storage) {
+        this.storage = storage;
     }
 
     @PostMapping
     public Film create(@Valid @RequestBody Film film) {
         Validator.validateFilm(film);
-        return service.create(film);
+        return storage.create(film);
     }
 
     @PutMapping
     public Film update(@Valid @RequestBody Film film) {
         Validator.validateFilm(film);
-        return service.update(film);
+        return storage.update(film);
     }
 
     @GetMapping
     public List<Film> get() {
-        return service.get();
+        return storage.get();
     }
 
     @GetMapping("/{id}")
     public Film getFilmById(@PathVariable int id) {
-        return service.getFilmById(id);
+        return storage.getFilmById(id);
     }
 
     @PutMapping("/{id}/like/{userId}")
     public void addLike(@PathVariable("id") int filmId, @PathVariable int userId) {
-        service.addLike(filmId, userId);
+        storage.addLike(filmId, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public void removeLike(@PathVariable("id") int filmId, @PathVariable long userId) {
-        service.removeLike(filmId, userId);
+    public void removeLike(@PathVariable("id") int filmId, @PathVariable int userId) {
+        storage.removeLike(filmId, userId);
     }
 
     @GetMapping("/popular")
     public List<Film> getPopularMovies(@RequestParam(required = false, defaultValue = "3") int count) {
-        return service.getPopularMovies(count);
+        return storage.getTopLikedFilms(count);
     }
 }
