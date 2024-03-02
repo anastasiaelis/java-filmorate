@@ -113,17 +113,22 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film getFilmById(int id) {
-        try {
-            String sqlQuery = "SELECT f.film_id as id, f.film_name as name, f.description as description, f.duration as duration, " +
-                    "f.release_date as release_date, f.mpa_id as mpa_id, m.mpa_name as mpa_name " +
-                    "FROM film AS f, mpa AS m WHERE f.film_id = ? AND f.mpa_id = m.mpa_id";
-            Film film = jdbcTemplate.queryForObject(sqlQuery, FILM_ROW_MAPPER, id);
-            if (film != null) {
-                film.setGenres(getFilmGenres(id));
+        if (id > 0) {
+            try {
+                String sqlQuery = "SELECT f.film_id as id, f.film_name as name, f.description as description, f.duration as duration, " +
+                        "f.release_date as release_date, f.mpa_id as mpa_id, m.mpa_name as mpa_name " +
+                        "FROM film AS f, mpa AS m WHERE f.film_id = ? AND f.mpa_id = m.mpa_id";
+                Film film = jdbcTemplate.queryForObject(sqlQuery, FILM_ROW_MAPPER, id);
+                if (film != null) {
+                    film.setGenres(getFilmGenres(id));
+                }
+                return film;
+            } catch (EmptyResultDataAccessException ex) {
+                throw new FilmNotFoundException("Фильм не найден.");
             }
-            return film;
-        } catch (EmptyResultDataAccessException ex) {
-            throw new FilmNotFoundException("Фильм не найден.");
+        } else {
+            log.error("название фильма пустое");
+            throw new ValidationException("ид фильма не должно быть отрицательным");
         }
     }
 

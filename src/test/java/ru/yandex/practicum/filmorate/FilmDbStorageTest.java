@@ -34,7 +34,7 @@ class FilmDbStorageTest {
         filmStorage.create(newFilm);
         Film upFilm = new Film(1, "", "vanya123", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
         Film upFilm2 = new Film(2, "film2", "vmm3", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
-        Film upFilm3 = new Film(5, "film5", "vya123", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
+        Film upFilm3 = new Film(0, "film5", "vya123", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
         filmStorage.create(upFilm2);
         filmStorage.create(upFilm3);
         // вызываем тестируемый метод
@@ -42,6 +42,7 @@ class FilmDbStorageTest {
         filmStorage.update(upFilm);
         filmStorage.getTopLikedFilms(1);
         List<Film> ccc = filmStorage.get();
+        filmStorage.getFilmById(1);
 
         // проверяем утверждения
         assertThat(savedFilm)
