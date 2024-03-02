@@ -35,8 +35,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film create(Film film) {
-        String sqlQuery = "INSERT INTO film(film_name, description, release_date, duration, mpa_id) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sqlQuery = "INSERT INTO film(film_name, description, release_date, duration, mpa_id) " + "VALUES (?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
@@ -101,9 +100,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Film> get() {
-        String sqlQuery = "SELECT f.film_id as id, f.film_name as name, f.description as description, f.duration as duration, " +
-                "f.release_date as release_date, f.mpa_id as mpa_id, m.mpa_name as mpa_name " +
-                "FROM film AS f, mpa AS m WHERE f.mpa_id = m.mpa_id";
+        String sqlQuery = "SELECT f.film_id as id, f.film_name as name, f.description as description, f.duration as duration, " + "f.release_date as release_date, f.mpa_id as mpa_id, m.mpa_name as mpa_name " + "FROM film AS f, mpa AS m WHERE f.mpa_id = m.mpa_id";
         List<Film> films = jdbcTemplate.query(sqlQuery, FILM_ROW_MAPPER);
         films.forEach(film -> {
             film.setGenres(getFilmGenres(film.getId()));
@@ -115,9 +112,7 @@ public class FilmDbStorage implements FilmStorage {
     public Film getFilmById(int id) {
         if (id > 0) {
             try {
-                String sqlQuery = "SELECT f.film_id as id, f.film_name as name, f.description as description, f.duration as duration, " +
-                        "f.release_date as release_date, f.mpa_id as mpa_id, m.mpa_name as mpa_name " +
-                        "FROM film AS f, mpa AS m WHERE f.film_id = ? AND f.mpa_id = m.mpa_id";
+                String sqlQuery = "SELECT f.film_id as id, f.film_name as name, f.description as description, f.duration as duration, " + "f.release_date as release_date, f.mpa_id as mpa_id, m.mpa_name as mpa_name " + "FROM film AS f, mpa AS m WHERE f.film_id = ? AND f.mpa_id = m.mpa_id";
                 Film film = jdbcTemplate.queryForObject(sqlQuery, FILM_ROW_MAPPER, id);
                 if (film != null) {
                     film.setGenres(getFilmGenres(id));
@@ -160,8 +155,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public void addLike(Integer userId, Integer filmId) {
-        String sqlQuery = "INSERT INTO film_like(user_id, film_id) " +
-                "VALUES (?, ?)";
+        String sqlQuery = "INSERT INTO film_like(user_id, film_id) " + "VALUES (?, ?)";
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"id"});
             stmt.setInt(1, userId);
@@ -188,12 +182,7 @@ public class FilmDbStorage implements FilmStorage {
             throw new ValidationException("Отрицательное число не возможно");
         }
 
-        String sqlQuery = "SELECT f.film_id as id, f.film_name as name, f.description as description, f.duration as duration, " +
-                "f.release_date as release_date, f.mpa_id as mpa_id, m.mpa_name as mpa_name, count(fl.user_Id) as likes_count " +
-                "FROM film AS f " +
-                "LEFT JOIN mpa AS m ON f.mpa_id = m.mpa_id " +
-                "LEFT JOIN film_like as fl " +
-                "ON f.film_id = fl.film_id GROUP BY f.film_id ORDER BY likes_count DESC";
+        String sqlQuery = "SELECT f.film_id as id, f.film_name as name, f.description as description, f.duration as duration, " + "f.release_date as release_date, f.mpa_id as mpa_id, m.mpa_name as mpa_name, count(fl.user_Id) as likes_count " + "FROM film AS f " + "LEFT JOIN mpa AS m ON f.mpa_id = m.mpa_id " + "LEFT JOIN film_like as fl " + "ON f.film_id = fl.film_id GROUP BY f.film_id ORDER BY likes_count DESC";
 
         if (count != null && count > 0) {
             sqlQuery += " limit " + count;
@@ -233,22 +222,21 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Genre> getAllGenres() {
-        // String  sqlQuery = "SELECT * FROM genre";
-        //return jdbcTemplate.query(sqlQuery, GENRE_ROW_MAPPER);
-        List<Genre> ds = new ArrayList<>();
-        for (int i = 0; i < 6; i = i + 1) {
-            String sqlQuery = "SELECT * FROM genre WHERE id = ?";
-            ds.add(jdbcTemplate.queryForObject(sqlQuery, GENRE_ROW_MAPPER, i + 1));
-
-        }
-        return ds;
+        String sqlQuery = "SELECT * FROM genre";
+        return jdbcTemplate.query(sqlQuery, GENRE_ROW_MAPPER);
+//        List<Genre> ds = new ArrayList<>();
+//        for (int i = 0; i < 6; i = i + 1) {
+//            String sqlQuery = "SELECT * FROM genre WHERE id = ?";
+//            ds.add(jdbcTemplate.queryForObject(sqlQuery, GENRE_ROW_MAPPER, i + 1));
+//
+//        }
+//        return ds;
     }
 
     private void addGenres(Integer filmId, List<Genre> genres) {
         genres = genres.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingInt(Genre::getId))), ArrayList::new));
 
-        String sqlQuery = "INSERT INTO film_genre(film_id, id) " +
-                "VALUES (?, ?)";
+        String sqlQuery = "INSERT INTO film_genre(film_id, id) " + "VALUES (?, ?)";
         genres.forEach(genre -> {
             jdbcTemplate.update(connection -> {
                 PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"id"});
