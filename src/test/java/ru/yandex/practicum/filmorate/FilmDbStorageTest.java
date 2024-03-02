@@ -7,10 +7,13 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmDbStorage;
+import ru.yandex.practicum.filmorate.storage.UserDbStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -23,6 +26,11 @@ class FilmDbStorageTest {
     @Test
     public void testFindFilmById() {
         // Подготавливаем данные для теста
+        User newUser = new User(1, "user@email.ru", "vanya123", "Ivan Petrov", LocalDate.of(1990, 1, 1), new HashSet<>());
+        UserDbStorage userStorage = new UserDbStorage(jdbcTemplate);
+        userStorage.create(newUser);
+        User newUser2 = new User(2, "udser@email.ru", "vanya123", "Ivan Petrov", LocalDate.of(1990, 1, 1), new HashSet<>());
+        userStorage.create(newUser2);
         Mpa apm = new Mpa(1, "G");
         Film newFilm = new Film(1, "useremail.ru", "vanya123", LocalDate.of(1990, 1, 1), 100, new ArrayList<>(), apm);
 
@@ -39,8 +47,15 @@ class FilmDbStorageTest {
         Film savedFilm = filmStorage.getFilmById(1);
 
         filmStorage.getTopLikedFilms(1);
-        List<Film> ccc = filmStorage.get();
+
         filmStorage.getFilmById(1);
+
+        filmStorage.addLike(1, 1);
+        filmStorage.addLike(1, 2);
+        filmStorage.addLike(1, 3);
+        filmStorage.addLike(2, 2);
+        //filmStorage.addLike(2,1);
+        List<Film> ccc = filmStorage.getTopLikedFilms(3);
 
         // проверяем утверждения
         assertThat(savedFilm)

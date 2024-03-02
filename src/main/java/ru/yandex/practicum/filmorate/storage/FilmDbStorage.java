@@ -161,7 +161,7 @@ public class FilmDbStorage implements FilmStorage {
     public void addLike(Integer userId, Integer filmId) {
         String sqlQuery = "INSERT INTO film_like(user_id, film_id) " + "VALUES (?, ?)";
         jdbcTemplate.update(connection -> {
-            PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"id"});
+            PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"film_id"});
             stmt.setInt(1, userId);
             stmt.setInt(2, filmId);
             return stmt;
@@ -182,12 +182,17 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public List<Film> getTopLikedFilms(Integer count) {
 
-        if (count != null && count < 0) {
+        if (count == null && count < 0) {
             log.error("Отрицательное число не возможно");
             throw new ValidationException("Отрицательное число не возможно");
         }
 
-        String sqlQuery = "SELECT f.film_id as id, f.film_name as name, f.description as description, f.duration as duration, " + "f.release_date as release_date, f.mpa_id as mpa_id, m.mpa_name as mpa_name, count(fl.user_Id) as likes_count " + "FROM film AS f " + "LEFT JOIN mpa AS m ON f.mpa_id = m.mpa_id " + "LEFT JOIN film_like as fl " + "ON f.film_id = fl.film_id GROUP BY f.film_id ORDER BY likes_count DESC";
+        String sqlQuery = "SELECT f.film_id as id, f.film_name as name," +
+                " f.description as description, f.duration as duration, " +
+                "f.release_date as release_date, f.mpa_id as mpa_id, m.mpa_name as mpa_name, " +
+                "count(fl.user_id) as likes_count FROM film AS f " +
+                "LEFT JOIN mpa AS m ON f.mpa_id = m.mpa_id LEFT JOIN film_like as fl " +
+                "ON f.film_id = fl.film_id GROUP BY f.film_id ORDER BY likes_count DESC";
 
         if (count != null && count > 0) {
             sqlQuery += " limit " + count;
