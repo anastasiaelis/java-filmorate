@@ -27,7 +27,7 @@ public class UserDbStorage implements UserStorage {
     public User create(User user) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("users")
-                .usingGeneratedKeyColumns("id");
+                .usingGeneratedKeyColumns("user_id");
         long id = simpleJdbcInsert.executeAndReturnKey(userToMap(user)).longValue();
         log.info("Пользователь {} был создан", id);
         return getUserById(id);
@@ -36,7 +36,7 @@ public class UserDbStorage implements UserStorage {
     @Override
     public User update(User user) {
         getUserById(user.getId());
-        String sqlQuery = "update users set email = ?, login = ?, name = ?, birthday = ? where id = ?";
+        String sqlQuery = "update users set email = ?, login = ?, name = ?, birthday = ? where user_id = ?";
         jdbcTemplate.update(sqlQuery, user.getEmail(), user.getLogin(),
                 user.getName(), user.getBirthday(), user.getId());
         sqlQuery = "delete from friendship where friend_id = ?";
@@ -60,7 +60,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User getUserById(long id) {
-        String sqlQuery = "select * from users where id = ?";
+        String sqlQuery = "select * from users where user_id = ?";
         List<User> users = jdbcTemplate.query(sqlQuery, (rs, rowNum) -> mapRowToUser(rs), id);
         if (users.size() != 1) {
             log.error("Пользователь c id={} не найден", id);
@@ -80,9 +80,9 @@ public class UserDbStorage implements UserStorage {
 
     private User mapRowToUser(ResultSet rs) throws SQLException {
         String sqlQuery = "select user_id from friendship where friend_id = ?";
-        Set<Long> friends = new HashSet<>(jdbcTemplate.queryForList(sqlQuery, Long.class, rs.getInt("id")));
+        Set<Long> friends = new HashSet<>(jdbcTemplate.queryForList(sqlQuery, Long.class, rs.getInt("user_id")));
         return User.builder()
-                .id(rs.getLong("id"))
+                .id(rs.getLong("user_id"))
                 .email(rs.getString("email"))
                 .login(rs.getString("login"))
                 .name(rs.getString("name"))
