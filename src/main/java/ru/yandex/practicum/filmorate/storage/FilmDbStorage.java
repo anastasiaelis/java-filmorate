@@ -230,13 +230,13 @@ public class FilmDbStorage implements FilmStorage {
     public List<Genre> getAllGenres() {
         // String sqlQuery = "SELECT * FROM genre";
         //return jdbcTemplate.query(sqlQuery, GENRE_ROW_MAPPER);
-        List<Genre> DS = new ArrayList<>();
+        List<Genre> ds = new ArrayList<>();
         for (int i = 0; i < 6; i = i + 1) {
             String sqlQuery = "SELECT * FROM genre WHERE id = ?";
-            DS.add(jdbcTemplate.queryForObject(sqlQuery, GENRE_ROW_MAPPER, i + 1));
+            ds.add(jdbcTemplate.queryForObject(sqlQuery, GENRE_ROW_MAPPER, i + 1));
 
         }
-        return DS;
+        return ds;
     }
 
     private void addGenres(Integer filmId, List<Genre> genres) {
