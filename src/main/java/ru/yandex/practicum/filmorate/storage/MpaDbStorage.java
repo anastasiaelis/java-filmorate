@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.MpaNotFoundException;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class MpaDbStorage implements MpaStorage {
     public List<Mpa> get() {
         String sqlQuery = "select mpa_id, mpa_name from mpa order by id";
         return jdbcTemplate.query(sqlQuery, (rs, rowNum) ->
-                new Mpa(rs.getInt("mpa_id"), rs.getString("mpa_name")));
+                new Mpa(rs.getInt("mpa.id"), rs.getString("name")));
     }
 
     @Override
