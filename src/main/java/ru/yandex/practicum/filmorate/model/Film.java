@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-@Validated
 public class Film implements Serializable {
     @Positive
     private int id;
