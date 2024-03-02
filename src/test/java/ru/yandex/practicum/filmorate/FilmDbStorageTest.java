@@ -27,10 +27,11 @@ class FilmDbStorageTest {
         Film newFilm = new Film(1, "useremail.ru", "vanya123", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
         FilmDbStorage filmStorage = new FilmDbStorage(jdbcTemplate);
         filmStorage.create(newFilm);
+        Film upFilm = new Film(1, "usdddfwq2weeremail.ru", "vanya123", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
 
         // вызываем тестируемый метод
         Film savedFilm = filmStorage.getFilmById(1);
-
+        filmStorage.update(upFilm);
         // проверяем утверждения
         assertThat(savedFilm)
                 .isNotNull() // проверяем, что объект не равен null

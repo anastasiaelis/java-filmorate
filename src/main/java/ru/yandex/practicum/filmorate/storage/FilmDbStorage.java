@@ -141,7 +141,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private void deleteFilmGenres(Integer filmId) {
-        String sqlQueryDeleteGenres = "DELETE FROM film_genres WHERE film_id = ?";
+        String sqlQueryDeleteGenres = "DELETE FROM film_genre WHERE film_id = ?";
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sqlQueryDeleteGenres);
             stmt.setInt(1, filmId);
@@ -222,7 +222,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Genre getGenre(Integer id) {
         try {
-            String sqlQuery = "SELECT * FROM genres WHERE id = ?";
+            String sqlQuery = "SELECT * FROM genre WHERE id = ?";
             return jdbcTemplate.queryForObject(sqlQuery, GENRE_ROW_MAPPER, id);
         } catch (EmptyResultDataAccessException ex) {
             throw new FilmNotFoundException("Failed to get film by this id.");
@@ -231,14 +231,14 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Genre> getAllGenres() {
-        String sqlQuery = "SELECT * FROM genres";
+        String sqlQuery = "SELECT * FROM genre";
         return jdbcTemplate.query(sqlQuery, GENRE_ROW_MAPPER);
     }
 
     private void addGenres(Integer filmId, List<Genre> genres) {
         genres = genres.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingInt(Genre::getId))), ArrayList::new));
 
-        String sqlQuery = "INSERT INTO film_genres(film_id, genre_id) " +
+        String sqlQuery = "INSERT INTO film_genre(film_id, genre_id) " +
                 "VALUES (?, ?)";
         genres.forEach(genre -> {
             jdbcTemplate.update(connection -> {
