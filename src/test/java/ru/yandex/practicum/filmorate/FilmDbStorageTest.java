@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.FilmDbStorage;
 
@@ -26,7 +27,10 @@ class FilmDbStorageTest {
         // Подготавливаем данные для теста
         Mpa apm = new Mpa(5, "NC-17");
         Film newFilm = new Film(1, "useremail.ru", "vanya123", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
+
         FilmDbStorage filmStorage = new FilmDbStorage(jdbcTemplate);
+        List<Genre> c5=filmStorage.getAllGenres();
+
         filmStorage.create(newFilm);
         Film upFilm = new Film(1, "", "vanya123", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
         Film upFilm2 = new Film(2, "film2", "vmm3", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
@@ -38,7 +42,6 @@ class FilmDbStorageTest {
         filmStorage.update(upFilm);
         filmStorage.getTopLikedFilms(1);
         List<Film> ccc = filmStorage.get();
-        filmStorage.getGenre(2);
 
         // проверяем утверждения
         assertThat(savedFilm)
