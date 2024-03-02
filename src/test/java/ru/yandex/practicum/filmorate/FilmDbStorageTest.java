@@ -43,6 +43,7 @@ class FilmDbStorageTest {
         filmStorage.getTopLikedFilms(1);
         List<Film> ccc = filmStorage.get();
         filmStorage.getFilmById(1);
+
         // проверяем утверждения
         assertThat(savedFilm)
                 .isNotNull() // проверяем, что объект не равен null
