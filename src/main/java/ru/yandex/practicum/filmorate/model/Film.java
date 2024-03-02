@@ -1,5 +1,8 @@
 package ru.yandex.practicum.filmorate.model;
 
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -12,7 +15,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class Film implements Serializable {
-    @Positive
+
     private int id;
 
     @NotBlank(message = "Film name is either empty or null.")
