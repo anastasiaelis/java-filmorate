@@ -9,6 +9,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.exception.GenreNotFoundException;
 import ru.yandex.practicum.filmorate.exception.MpaNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -217,26 +218,26 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Genre getGenre(Integer id) {
+//        try {
+//            String sqlQuery = "SELECT * FROM genre WHERE id = ?";
+//            return jdbcTemplate.queryForObject(sqlQuery, GENRE_ROW_MAPPER, id);
+//        } catch (EmptyResultDataAccessException ex) {
+//            log.error("Фильм не найден.");
+//            throw new FilmNotFoundException("Фильм не найден.");
+//        }
+        String sql = "SELECT * FROM genre WHERE id = ?";
         try {
-            String sqlQuery = "SELECT * FROM genre WHERE id = ?";
-            return jdbcTemplate.queryForObject(sqlQuery, GENRE_ROW_MAPPER, id);
-        } catch (EmptyResultDataAccessException ex) {
-            log.error("Фильм не найден.");
-            throw new FilmNotFoundException("Фильм не найден.");
+            return jdbcTemplate.queryForObject(sql, GENRE_ROW_MAPPER, id);
+        } catch (EmptyResultDataAccessException e) {
+            log.warn("Жанр с id {} не найден", id);
+            throw new GenreNotFoundException("Жанр с id  не найден " + id);
         }
     }
 
     @Override
     public List<Genre> getAllGenres() {
-//        String sqlQuery = "SELECT * FROM genre";
-        //      return jdbcTemplate.query(sqlQuery, GENRE_ROW_MAPPER);
-        List<Genre> ds = new ArrayList<>();
-        for (int i = 0; i < 6; i = i + 1) {
-            String sqlQuery = "SELECT * FROM genre WHERE id = ?";
-            ds.add(jdbcTemplate.queryForObject(sqlQuery, GENRE_ROW_MAPPER, i + 1));
-
-        }
-        return ds;
+        String sqlQuery = "SELECT * FROM genre ORDER BY id";
+        return jdbcTemplate.query(sqlQuery, GENRE_ROW_MAPPER);
     }
 
     private void addGenres(Integer filmId, List<Genre> genres) {
