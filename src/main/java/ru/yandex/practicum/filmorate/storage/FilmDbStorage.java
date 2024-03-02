@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,6 +23,7 @@ import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toCollection;
 
+@Slf4j
 @Component("FilmDbStorage")
 public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
@@ -106,7 +108,7 @@ public class FilmDbStorage implements FilmStorage {
     public List<Film> getAll() {
         String sqlQuery = "SELECT f.film_id as id, f.film_name as name, f.description as description, f.duration as duration, " +
                 "f.release_date as release_date, f.mpa_id as mpa_id, m.mpa_name as mpa_name " +
-                "FROM film AS f, mpas AS m WHERE f.mpa_id = m.id";
+                "FROM film AS f, mpa AS m WHERE f.mpa_id = m.mpa_id";
         List<Film> films = jdbcTemplate.query(sqlQuery, FILM_ROW_MAPPER);
         films.forEach(film -> {
             film.setGenres(getFilmGenres(film.getId()));
@@ -158,7 +160,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public void addLike(Integer userId, Integer filmId) {
-        String sqlQuery = "INSERT INTO film_likes(user_id, film_id) " +
+        String sqlQuery = "INSERT INTO film_like(user_id, film_id) " +
                 "VALUES (?, ?)";
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"id"});
@@ -170,7 +172,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public void removeLike(Integer userId, Integer filmId) {
-        String sqlQuery = "DELETE FROM film_likes WHERE user_id = ? and film_id = ?";
+        String sqlQuery = "DELETE FROM film_like WHERE user_id = ? and film_id = ?";
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sqlQuery);
             stmt.setInt(1, userId);
@@ -186,12 +188,12 @@ public class FilmDbStorage implements FilmStorage {
             throw new ValidationException("Negative value count is not allowed.");
         }
 
-        String sqlQuery = "SELECT f.id as id, f.name as name, f.description as description, f.duration as duration, " +
-                "f.release_date as release_date, f.mpa_id as mpa_id, m.name as mpa_name, count(fl.user_Id) as likes_count " +
-                "FROM films AS f " +
-                "LEFT JOIN mpas AS m ON f.mpa_id = m.id " +
-                "LEFT JOIN film_likes as fl " +
-                "ON f.id = fl.film_id GROUP BY f.id ORDER BY likes_count DESC";
+        String sqlQuery = "SELECT f.film_id as id, f.film_name as name, f.description as description, f.duration as duration, " +
+                "f.release_date as release_date, f.mpa_id as mpa_id, m.mpa_name as mpa_name, count(fl.user_Id) as likes_count " +
+                "FROM film AS f " +
+                "LEFT JOIN mpa AS m ON f.mpa_id = m.mpa_id " +
+                "LEFT JOIN film_like as fl " +
+                "ON f.film_id = fl.film_id GROUP BY f.film_id ORDER BY likes_count DESC";
 
         if (count != null && count > 0) {
             sqlQuery += " limit " + count;
@@ -206,7 +208,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Mpa getMpa(Integer id) {
         try {
-            String sqlQuery = "SELECT id, name FROM mpas WHERE id = ?";
+            String sqlQuery = "SELECT mpa_id, mpa_name FROM mpa WHERE mpa_id = ?";
             return jdbcTemplate.queryForObject(sqlQuery, MPA_ROW_MAPPER, id);
         } catch (EmptyResultDataAccessException ex) {
             throw new MpaNotFoundException("Failed to get mpa by this id.");
@@ -215,7 +217,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Mpa> getAllMpa() {
-        String sqlQuery = "SELECT * FROM mpas";
+        String sqlQuery = "SELECT * FROM mpa";
         return jdbcTemplate.query(sqlQuery, MPA_ROW_MAPPER);
     }
 
@@ -252,8 +254,8 @@ public class FilmDbStorage implements FilmStorage {
 
     private static final RowMapper<Film> FILM_ROW_MAPPER = (rs, rowNum) -> {
         Film film = new Film();
-        film.setId(rs.getInt("id"));
-        film.setName(rs.getString("name"));
+        film.setId(rs.getInt("film_id"));
+        film.setName(rs.getString("film_name"));
         film.setDescription(rs.getString("description"));
         film.setDuration(rs.getInt("duration"));
         film.setReleaseDate(rs.getDate("release_date").toLocalDate());
