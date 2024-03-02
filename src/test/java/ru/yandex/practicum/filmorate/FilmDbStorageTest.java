@@ -37,7 +37,7 @@ class FilmDbStorageTest {
         Film savedFilm = filmStorage.getFilmById(1);
         filmStorage.update(upFilm);
         filmStorage.getTopLikedFilms(1);
-        List<Film> ccc= filmStorage.get();
+        List<Film> ccc = filmStorage.get();
 
 
         // проверяем утверждения
