@@ -55,4 +55,13 @@ public class FilmController {
     public List<Film> getPopularMovies(@RequestParam(required = false, defaultValue = "10") int count) {
         return service.getPopularMovies(count);
     }
+//    @GetMapping
+//    public List<Genre> get() {
+//        return storage.get();
+//    }
+//
+//    @GetMapping("/{id}")
+//    public Genre getGenreById(@PathVariable int id) {
+//        return storage.getGenreById(id);
+//    }
 }
