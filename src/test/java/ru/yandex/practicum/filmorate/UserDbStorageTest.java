@@ -21,15 +21,16 @@ class UserDbStorageTest {
     @Test
     public void testFindUserById() {
         // Подготавливаем данные для теста
-        User newUser = new User(2, "user@email.ru", "vanya123", "Ivan Petrov", LocalDate.of(1990, 1, 1), new HashSet<>());
+        User newUser = new User(1, "user@email.ru", "vanya123", "Ivan Petrov", LocalDate.of(1990, 1, 1), new HashSet<>());
         UserDbStorage userStorage = new UserDbStorage(jdbcTemplate);
         userStorage.create(newUser);
 
         // вызываем тестируемый метод
         User savedUser = userStorage.getUserById(1);
+        //  User savedUser2 = userStorage.getUserById(2);
 
         // проверяем утверждения
-        assertThat(userStorage.create(savedUser))
+        assertThat(savedUser)
                 .isNotNull() // проверяем, что объект не равен null
                 .usingRecursiveComparison() // проверяем, что значения полей нового
                 .isEqualTo(newUser);        // и сохраненного пользователя - совпадают
