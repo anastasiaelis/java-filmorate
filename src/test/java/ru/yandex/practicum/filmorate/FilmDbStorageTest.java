@@ -25,7 +25,6 @@ class FilmDbStorageTest {
 
     @Test
     public void testFindFilmById() {
-        // Подготавливаем данные для теста
         User newUser = new User(1, "user@email.ru", "vanya123", "Ivan Petrov", LocalDate.of(1990, 1, 1), new HashSet<>());
         UserDbStorage userStorage = new UserDbStorage(jdbcTemplate);
         userStorage.create(newUser);
