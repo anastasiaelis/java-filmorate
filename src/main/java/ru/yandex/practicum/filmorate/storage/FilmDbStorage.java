@@ -129,7 +129,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Genre> getFilmGenres(Integer filmId) {
-        String sqlQuery = "SELECT g.genre_id as id, g.genre_name as name FROM genre AS g INNER JOIN film_genre AS fg ON fg.genre_id = g.genre_id WHERE fg.film_id = ? ORDER BY g.genre_id";
+        String sqlQuery = "SELECT g.id as id, g.genre_name as name FROM genre AS g INNER JOIN film_genre AS fg ON fg.id = g.id WHERE fg.film_id = ? ORDER BY g.id";
         return jdbcTemplate.query(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sqlQuery);
             stmt.setInt(1, filmId);
@@ -219,7 +219,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Genre getGenre(Integer id) {
         try {
-            String sqlQuery = "SELECT * FROM genre WHERE genre_id = ?";
+            String sqlQuery = "SELECT * FROM genre WHERE id = ?";
             return jdbcTemplate.queryForObject(sqlQuery, GENRE_ROW_MAPPER, id);
         } catch (EmptyResultDataAccessException ex) {
             throw new FilmNotFoundException("Фильм не найден.");
@@ -235,7 +235,7 @@ public class FilmDbStorage implements FilmStorage {
     private void addGenres(Integer filmId, List<Genre> genres) {
         genres = genres.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingInt(Genre::getId))), ArrayList::new));
 
-        String sqlQuery = "INSERT INTO film_genre(film_id, genre_id) " +
+        String sqlQuery = "INSERT INTO film_genre(film_id, id) " +
                 "VALUES (?, ?)";
         genres.forEach(genre -> {
             jdbcTemplate.update(connection -> {
@@ -259,7 +259,7 @@ public class FilmDbStorage implements FilmStorage {
     };
     private static final RowMapper<Genre> GENRE_ROW_MAPPER = (rs, rowNum) -> {
         Genre genre = new Genre();
-        genre.setId(rs.getInt("genre_id"));
+        genre.setId(rs.getInt("id"));
         genre.setName(rs.getString("genre_name"));
         return genre;
     };
