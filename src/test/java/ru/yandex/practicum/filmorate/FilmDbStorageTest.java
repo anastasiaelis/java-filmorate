@@ -38,7 +38,7 @@ class FilmDbStorageTest {
         filmStorage.update(upFilm);
         filmStorage.getTopLikedFilms(1);
         List<Film> ccc = filmStorage.get();
-
+        filmStorage.getGenre(2);
 
         // проверяем утверждения
         assertThat(savedFilm)

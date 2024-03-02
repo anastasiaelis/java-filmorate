@@ -219,7 +219,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Genre getGenre(Integer id) {
         try {
-            String sqlQuery = "SELECT * FROM genre WHERE id = ?";
+            String sqlQuery = "SELECT * FROM genre WHERE genre_id = ?";
             return jdbcTemplate.queryForObject(sqlQuery, GENRE_ROW_MAPPER, id);
         } catch (EmptyResultDataAccessException ex) {
             throw new FilmNotFoundException("Фильм не найден.");
@@ -260,7 +260,7 @@ public class FilmDbStorage implements FilmStorage {
     private static final RowMapper<Genre> GENRE_ROW_MAPPER = (rs, rowNum) -> {
         Genre genre = new Genre();
         genre.setId(rs.getInt("genre_id"));
-        genre.setName(rs.getString("name"));
+        genre.setName(rs.getString("genre_name"));
         return genre;
     };
     private static final RowMapper<Mpa> MPA_ROW_MAPPER = (rs, rowNum) -> {
