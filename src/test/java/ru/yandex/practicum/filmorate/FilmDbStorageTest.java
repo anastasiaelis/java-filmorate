@@ -32,14 +32,15 @@ class FilmDbStorageTest {
         List<Genre> c5 = filmStorage.getAllGenres();
 
         filmStorage.create(newFilm);
-        Film upFilm = new Film(1, "", "vanya123", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
+        Film upFilm = new Film(1, "", "vanya123", LocalDate.of(1990, 1, 1), 190, new HashSet<>(), apm, new ArrayList<>());
         Film upFilm2 = new Film(2, "film2", "vmm3", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
         Film upFilm3 = new Film(0, "film5", "vya123", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
         filmStorage.create(upFilm2);
         filmStorage.create(upFilm3);
         // вызываем тестируемый метод
-        Film savedFilm = filmStorage.getFilmById(1);
         filmStorage.update(upFilm);
+        Film savedFilm = filmStorage.getFilmById(1);
+
         filmStorage.getTopLikedFilms(1);
         List<Film> ccc = filmStorage.get();
         filmStorage.getFilmById(1);
@@ -48,6 +49,6 @@ class FilmDbStorageTest {
         assertThat(savedFilm)
                 .isNotNull() // проверяем, что объект не равен null
                 .usingRecursiveComparison() // проверяем, что значения полей нового
-                .isEqualTo(newFilm);        // и сохраненного пользователя - совпадают
+                .isEqualTo(upFilm);        // и сохраненного пользователя - совпадают
     }
 }

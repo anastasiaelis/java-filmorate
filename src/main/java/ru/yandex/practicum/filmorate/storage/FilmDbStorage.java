@@ -73,6 +73,7 @@ public class FilmDbStorage implements FilmStorage {
         });
 
         if (rowsUpdated == 0) {
+            log.error("Фильм не обновлен.");
             throw new FilmNotFoundException("Фильм не обновлен.");
         }
 
@@ -94,7 +95,8 @@ public class FilmDbStorage implements FilmStorage {
         });
 
         if (rowsUpdated == 0) {
-            throw new ValidationException("Unable to remove user.");
+            log.error("невозможно удалить пользователя");
+            throw new ValidationException("невозможно удалить пользователя");
         }
     }
 
@@ -119,10 +121,11 @@ public class FilmDbStorage implements FilmStorage {
                 }
                 return film;
             } catch (EmptyResultDataAccessException ex) {
+                log.error("Фильм не найден");
                 throw new FilmNotFoundException("Фильм не найден.");
             }
         } else {
-            log.error("название фильма пустое");
+            log.error("ид фильма не должно быть отрицательным");
             throw new ValidationException("ид фильма не должно быть отрицательным");
         }
     }
@@ -179,6 +182,7 @@ public class FilmDbStorage implements FilmStorage {
     public List<Film> getTopLikedFilms(Integer count) {
 
         if (count != null && count < 0) {
+            log.error("Отрицательное число не возможно");
             throw new ValidationException("Отрицательное число не возможно");
         }
 
@@ -200,6 +204,7 @@ public class FilmDbStorage implements FilmStorage {
             String sqlQuery = "SELECT mpa_id, mpa_name FROM mpa WHERE mpa_id = ?";
             return jdbcTemplate.queryForObject(sqlQuery, MPA_ROW_MAPPER, id);
         } catch (EmptyResultDataAccessException ex) {
+            log.error("МРА не найден.");
             throw new MpaNotFoundException("МРА не найден.");
         }
     }
@@ -216,6 +221,7 @@ public class FilmDbStorage implements FilmStorage {
             String sqlQuery = "SELECT * FROM genre WHERE id = ?";
             return jdbcTemplate.queryForObject(sqlQuery, GENRE_ROW_MAPPER, id);
         } catch (EmptyResultDataAccessException ex) {
+            log.error("Фильм не найден.");
             throw new FilmNotFoundException("Фильм не найден.");
         }
     }
@@ -269,5 +275,4 @@ public class FilmDbStorage implements FilmStorage {
         mpa.setName(rs.getString("mpa_name"));
         return mpa;
     };
-
 }
