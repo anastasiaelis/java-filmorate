@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
@@ -12,6 +13,8 @@ import javax.validation.constraints.NotBlank;
 
 public class Mpa {
     @NotBlank
+    @NotNull
+
     private int id;
     private String name;
 

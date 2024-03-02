@@ -18,8 +18,6 @@ public interface FilmStorage {
 
     void remove(Film film);
 
-    List<Film> getAll();
-
     List<Genre> getFilmGenres(Integer filmId);
 
     Film updateFilmGenres(Film film);

@@ -74,7 +74,7 @@ public class FilmDbStorage implements FilmStorage {
         });
 
         if (rowsUpdated == 0) {
-            throw new FilmNotFoundException("Unable to update film.");
+            throw new FilmNotFoundException("Фильм не обновлен.");
         }
 
         if (film.getGenres() != null) {
@@ -85,12 +85,7 @@ public class FilmDbStorage implements FilmStorage {
         return getFilmById(film.getId());
     }
 
-    @Override
-    public List<Film> get() {
-        return null;
-    }
-
-    @Override
+   @Override
     public void remove(Film film) {
         String sqlQuery = "DELETE FROM film WHERE film_id = ?";
         int rowsUpdated = jdbcTemplate.update(connection -> {
@@ -105,7 +100,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> getAll() {
+    public List<Film> get() {
         String sqlQuery = "SELECT f.film_id as id, f.film_name as name, f.description as description, f.duration as duration, " +
                 "f.release_date as release_date, f.mpa_id as mpa_id, m.mpa_name as mpa_name " +
                 "FROM film AS f, mpa AS m WHERE f.mpa_id = m.mpa_id";
@@ -128,7 +123,7 @@ public class FilmDbStorage implements FilmStorage {
             }
             return film;
         } catch (EmptyResultDataAccessException ex) {
-            throw new FilmNotFoundException("Failed to get film by this id.");
+            throw new FilmNotFoundException("Фильм не найден.");
         }
     }
 
@@ -185,7 +180,7 @@ public class FilmDbStorage implements FilmStorage {
     public List<Film> getTopLikedFilms(Integer count) {
 
         if (count != null && count < 0) {
-            throw new ValidationException("Negative value count is not allowed.");
+            throw new ValidationException("Отрицательное число не возможно");
         }
 
         String sqlQuery = "SELECT f.film_id as id, f.film_name as name, f.description as description, f.duration as duration, " +
@@ -211,7 +206,7 @@ public class FilmDbStorage implements FilmStorage {
             String sqlQuery = "SELECT mpa_id, mpa_name FROM mpa WHERE mpa_id = ?";
             return jdbcTemplate.queryForObject(sqlQuery, MPA_ROW_MAPPER, id);
         } catch (EmptyResultDataAccessException ex) {
-            throw new MpaNotFoundException("Failed to get mpa by this id.");
+            throw new MpaNotFoundException("МРА не найден.");
         }
     }
 
@@ -227,7 +222,7 @@ public class FilmDbStorage implements FilmStorage {
             String sqlQuery = "SELECT * FROM genre WHERE id = ?";
             return jdbcTemplate.queryForObject(sqlQuery, GENRE_ROW_MAPPER, id);
         } catch (EmptyResultDataAccessException ex) {
-            throw new FilmNotFoundException("Failed to get film by this id.");
+            throw new FilmNotFoundException("Фильм не найден.");
         }
     }
 
