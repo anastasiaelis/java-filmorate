@@ -129,7 +129,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Genre> getFilmGenres(Integer filmId) {
-        String sqlQuery = "SELECT g.id as id, g.genre_name as name FROM genre AS g INNER JOIN film_genre AS fg ON fg.id = g.id WHERE fg.film_id = ? ORDER BY g.id";
+        String sqlQuery = "SELECT g.id as id, g.name as name FROM genre AS g INNER JOIN film_genre AS fg ON fg.id = g.id WHERE fg.film_id = ? ORDER BY g.id";
         return jdbcTemplate.query(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sqlQuery);
             stmt.setInt(1, filmId);
@@ -260,7 +260,7 @@ public class FilmDbStorage implements FilmStorage {
     private static final RowMapper<Genre> GENRE_ROW_MAPPER = (rs, rowNum) -> {
         Genre genre = new Genre();
         genre.setId(rs.getInt("id"));
-        genre.setName(rs.getString("genre_name"));
+        genre.setName(rs.getString("name"));
         return genre;
     };
     private static final RowMapper<Mpa> MPA_ROW_MAPPER = (rs, rowNum) -> {
