@@ -9,6 +9,12 @@ import lombok.Data;
 @Builder
 public class Genre {
 
-    private int id;
-    private String name;
+    private int film_id;
+    private int genre_id;
+    private String  genre_name;
+
+
+    public Genre() {
+
+    }
 }
