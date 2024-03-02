@@ -25,7 +25,7 @@ class FilmDbStorageTest {
     @Test
     public void testFindFilmById() {
         // Подготавливаем данные для теста
-        Mpa apm = new Mpa(5, "NC-17");
+        Mpa apm = new Mpa(1, "G");
         Film newFilm = new Film(1, "useremail.ru", "vanya123", LocalDate.of(1990, 1, 1), 100, new HashSet<>(), apm, new ArrayList<>());
 
         FilmDbStorage filmStorage = new FilmDbStorage(jdbcTemplate);
