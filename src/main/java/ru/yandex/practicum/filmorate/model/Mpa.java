@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -11,7 +12,7 @@ import java.util.Objects;
 
 @Data
 @AllArgsConstructor
-
+@Validated
 public class Mpa {
     @Getter
     @NotBlank
