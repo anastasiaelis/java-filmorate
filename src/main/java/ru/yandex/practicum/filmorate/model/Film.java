@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Mpa;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -14,8 +13,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+@Validated
 public class Film implements Serializable {
-
+    @Positive
     private int id;
 
     @NotBlank(message = "Film name is either empty or null.")
