@@ -212,7 +212,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Mpa> getAllMpa() {
-        String sqlQuery = "SELECT * FROM mpa";
+        String sqlQuery = "SELECT * FROM mpa ORDER BY mpa_id";
         return jdbcTemplate.query(sqlQuery, MPA_ROW_MAPPER);
     }
 
