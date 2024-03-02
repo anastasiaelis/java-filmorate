@@ -269,7 +269,7 @@ public class FilmDbStorage implements FilmStorage {
         film.setMpa(new Mpa(rs.getInt("mpa_id"), rs.getString("mpa_name")));
         return film;
     };
-    private static final RowMapper<Genre> GENRE_ROW_MAPPER = (rs, rowNum) -> {
+    private static final RowMapper<Genre> GENRE_ROW_MAPPER = (rs, rowNun) -> {
         Genre genre = new Genre();
         genre.setId(rs.getInt("id"));
         genre.setName(rs.getString("name"));
