@@ -2,25 +2,25 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
-import java.util.Comparator;
+//import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class FilmService {
-    private final FilmStorage storage;
 
+    private final FilmStorage storage;
     private final UserService userService;
 
     @Autowired
-    public FilmService(InMemoryFilmStorage storage, UserService userService) {
+    public FilmService(@Qualifier("FilmDbStorage") FilmStorage storage, UserService userService) {
         this.storage = storage;
         this.userService = userService;
     }
@@ -30,6 +30,7 @@ public class FilmService {
     }
 
     public Film update(Film film) {
+
         if (getFilmById(film.getId()) == null) {
             log.error("Фильм c id={} не найден", film.getId());
             throw new FilmNotFoundException(String.format("Фильм с id=%d не найден", film.getId()));
@@ -45,24 +46,28 @@ public class FilmService {
         return storage.getFilmById(id);
     }
 
-    public void addLike(int filmId, long userId) {
+    public void addLike(int filmId, int userId) {
         userService.getUserById(userId);
-        storage.getFilmById(filmId).getLikes().add(userId);
+        Film film = storage.getFilmById(filmId);
+        //film.getLikes().add(userId);
         log.info("Пользователь {} поставил лайк фильму {}", userId, filmId);
+        storage.update(film);
     }
 
     public void removeLike(int filmId, long userId) {
         userService.getUserById(userId);
-        storage.getFilmById(filmId).getLikes().remove(userId);
+        Film film = storage.getFilmById(filmId);
+        //film.getLikes().remove(userId);
         log.info("Пользователь {} удалил лайк фильма {}", userId, filmId);
+        storage.update(film);
     }
 
     public List<Film> getPopularMovies(int count) {
-        log.info("получен запрос на список популярных фильмов");
         return storage.get()
                 .stream()
-                .sorted(Comparator.comparing(Film::numberOfLikes).reversed())
+          //      .sorted(Comparator.comparing(Film::numberOfLikes).reversed())
                 .limit(count)
                 .collect(Collectors.toList());
     }
+
 }

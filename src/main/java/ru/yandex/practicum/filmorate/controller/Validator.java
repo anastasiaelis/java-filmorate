@@ -9,7 +9,13 @@ import java.time.Month;
 
 @Slf4j
 public class Validator {
+
     public static void validateFilm(Film film) {
+        if (film.getName() == null || film.getName().isBlank()) {
+            log.error("название фильма пустое");
+            throw new ValidationException("название фильма не должно отсутствовать");
+        }
+
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, Month.DECEMBER, 28))) {
             log.error("Дата релиза фильма раньше допустимого порога");
             throw new ValidationException("Дата релиза не должна быть ранее 28.12.1895");
