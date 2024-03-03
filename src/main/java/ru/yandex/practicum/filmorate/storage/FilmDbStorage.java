@@ -8,10 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.exception.GenreNotFoundException;
-import ru.yandex.practicum.filmorate.exception.MpaNotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.exception.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
@@ -96,8 +93,8 @@ public class FilmDbStorage implements FilmStorage {
         });
 
         if (rowsUpdated == 0) {
-            log.error("невозможно удалить пользователя");
-            throw new ValidationException("невозможно удалить пользователя");
+            log.error("невозможно удалить фильм");
+            throw new ValidationException("невозможно удалить фильм");
         }
     }
 
@@ -180,7 +177,7 @@ public class FilmDbStorage implements FilmStorage {
 
         if (rowsUpdated == 0) {
             log.error("невозможно удалить Like");
-            throw new ValidationException("невозможно удалить Like");
+            throw new UserNotFoundException("невозможно удалить Like");
         }
        }
 
