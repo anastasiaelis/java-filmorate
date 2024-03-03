@@ -1,18 +1,12 @@
 package ru.yandex.practicum.filmorate.model;
 
-//import ru.yandex.practicum.filmorate.model.Genre;
-//import ru.yandex.practicum.filmorate.model.Mpa;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
-//import java.util.HashSet;
 import java.util.List;
-//import java.util.Objects;
-//import java.util.Set;
 
 public class Film implements Serializable {
 
@@ -30,8 +24,6 @@ public class Film implements Serializable {
     private List<Genre> genres;
 
     private Mpa mpa;
-
-//    private Set<Integer> likes = new HashSet<>();
 
     public Film() {
     }
@@ -77,22 +69,6 @@ public class Film implements Serializable {
         this.id = id;
     }
 
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Film film = (Film) o;
-//        return id == film.id && duration == film.duration && name.equals(film.name) &&
-//                description.equals(film.description) && releaseDate.equals(film.releaseDate) &&
-//                Objects.equals(likes, film.likes);
-//    }
-
-    //@Override
-   // public int hashCode() {
-      //  return Objects.hash(id, name, description, releaseDate, duration, likes);
-    //}
-
     public int getId() {
         return id;
     }
@@ -133,22 +109,6 @@ public class Film implements Serializable {
         this.duration = duration;
     }
 
-    //public Set<Integer> getLikes() {
-   //     return likes;
-    //}
-
-//    public void setLikes(Set<Integer> likes) {
-    //    this.likes = likes;
-  //  }
-//
-   // public void addLike(Integer userId) {
-     //   likes.add(userId);
-   // }
-
-    //public void removeLike(Integer userId) {
-      //  likes.remove(userId);
-   // }
-
     public List<Genre> getGenres() {
         return genres;
     }
@@ -164,9 +124,4 @@ public class Film implements Serializable {
     public void setMpa(Mpa mpa) {
         this.mpa = mpa;
     }
-
-
-    //public int numberOfLikes() {
-      //  return likes.size();
-    //}
 }
