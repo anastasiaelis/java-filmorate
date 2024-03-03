@@ -10,7 +10,6 @@ import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.FilmDbStorage;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
