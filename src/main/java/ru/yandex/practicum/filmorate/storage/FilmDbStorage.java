@@ -197,19 +197,24 @@ public class FilmDbStorage implements FilmStorage {
         if (co != null && co > 0) {
             sqlQuery += " limit " + co;
         }
-//        String sqlQuery = "SELECT f.*, m.mpa_name " +
-//                "FROM film AS f " +
-//                "JOIN mpa AS m ON f.mpa_id = m.mpa_id " +
-//                "LEFT OUTER JOIN (SELECT film_id, COUNT (user_id) AS likes_pop " +
-//                "FROM film_like GROUP BY film_id ORDER BY likes_pop DESC LIMIT ?)" +
-//                " AS top_films ON f.film_id = top_films.film_id ORDER BY top_films.likes_pop DESC LIMIT  ?";
-
         List<Film> films = jdbcTemplate.query(sqlQuery, FILM_ROW_MAPPER);
         films.forEach(film -> {
             film.setGenres(getFilmGenres(film.getId()));
         });
         return films;
     }
+
+    public Film getMostPopFilm() {
+        String sqlQuery = "SELECT f.film_id as id, f.film_name as name," +
+                " f.description as description, f.duration as duration, " +
+                "f.release_date as release_date, f.mpa_id as mpa_id, m.mpa_name as mpa_name, " +
+                "COUNT(fl.user_id) as likes_count FROM film AS f " +
+                "LEFT JOIN mpa AS m ON f.mpa_id = m.mpa_id LEFT JOIN film_like as fl " +
+                "ON f.film_id = fl.film_id GROUP BY f.film_id ORDER BY likes_count DESC limit 1";
+        Film film1 = jdbcTemplate.query(sqlQuery, FILM_ROW_MAPPER).get(0);
+        return film1;
+    }
+
 
     @Override
     public Mpa getMpa(Integer id) {

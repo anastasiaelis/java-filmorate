@@ -56,9 +56,13 @@ class FilmDbStorageTest {
         filmStorage.addLike(1, 3);
         ccc = filmStorage.getTopLikedFilms(3);
         filmStorage.addLike(2, 2);
+        Film cc = filmStorage.getMostPopFilm();
         ccc = filmStorage.getTopLikedFilms(3);
         filmStorage.removeLike(1,2);
+        cc = filmStorage.getMostPopFilm();
+
         ccc = filmStorage.getTopLikedFilms(3);
+        cc = filmStorage.getMostPopFilm();
 
         //filmStorage.addLike(2,1);
 
