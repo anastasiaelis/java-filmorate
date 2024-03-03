@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Mpa;
+//import ru.yandex.practicum.filmorate.model.Genre;
+//import ru.yandex.practicum.filmorate.model.Mpa;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -9,10 +9,10 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
+//import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+//import java.util.Objects;
+//import java.util.Set;
 
 public class Film implements Serializable {
 
