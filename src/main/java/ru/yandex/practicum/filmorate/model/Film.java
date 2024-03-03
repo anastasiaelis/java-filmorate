@@ -31,7 +31,7 @@ public class Film implements Serializable {
 
     private Mpa mpa;
 
-    private Set<Integer> likes = new HashSet<>();
+//    private Set<Integer> likes = new HashSet<>();
 
     public Film() {
     }
@@ -78,20 +78,20 @@ public class Film implements Serializable {
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Film film = (Film) o;
-        return id == film.id && duration == film.duration && name.equals(film.name) &&
-                description.equals(film.description) && releaseDate.equals(film.releaseDate) &&
-                Objects.equals(likes, film.likes);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Film film = (Film) o;
+//        return id == film.id && duration == film.duration && name.equals(film.name) &&
+//                description.equals(film.description) && releaseDate.equals(film.releaseDate) &&
+//                Objects.equals(likes, film.likes);
+//    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, releaseDate, duration, likes);
-    }
+    //@Override
+   // public int hashCode() {
+      //  return Objects.hash(id, name, description, releaseDate, duration, likes);
+    //}
 
     public int getId() {
         return id;
@@ -133,21 +133,21 @@ public class Film implements Serializable {
         this.duration = duration;
     }
 
-    public Set<Integer> getLikes() {
-        return likes;
-    }
+    //public Set<Integer> getLikes() {
+   //     return likes;
+    //}
 
-    public void setLikes(Set<Integer> likes) {
-        this.likes = likes;
-    }
+//    public void setLikes(Set<Integer> likes) {
+    //    this.likes = likes;
+  //  }
+//
+   // public void addLike(Integer userId) {
+     //   likes.add(userId);
+   // }
 
-    public void addLike(Integer userId) {
-        likes.add(userId);
-    }
-
-    public void removeLike(Integer userId) {
-        likes.remove(userId);
-    }
+    //public void removeLike(Integer userId) {
+      //  likes.remove(userId);
+   // }
 
     public List<Genre> getGenres() {
         return genres;
@@ -166,7 +166,7 @@ public class Film implements Serializable {
     }
 
 
-    public int numberOfLikes() {
-        return likes.size();
-    }
+    //public int numberOfLikes() {
+      //  return likes.size();
+    //}
 }

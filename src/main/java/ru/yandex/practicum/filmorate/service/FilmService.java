@@ -49,7 +49,7 @@ public class FilmService {
     public void addLike(int filmId, int userId) {
         userService.getUserById(userId);
         Film film = storage.getFilmById(filmId);
-        film.getLikes().add(userId);
+        //film.getLikes().add(userId);
         log.info("Пользователь {} поставил лайк фильму {}", userId, filmId);
         storage.update(film);
     }
@@ -57,7 +57,7 @@ public class FilmService {
     public void removeLike(int filmId, long userId) {
         userService.getUserById(userId);
         Film film = storage.getFilmById(filmId);
-        film.getLikes().remove(userId);
+        //film.getLikes().remove(userId);
         log.info("Пользователь {} удалил лайк фильма {}", userId, filmId);
         storage.update(film);
     }
@@ -65,7 +65,7 @@ public class FilmService {
     public List<Film> getPopularMovies(int count) {
         return storage.get()
                 .stream()
-                .sorted(Comparator.comparing(Film::numberOfLikes).reversed())
+          //      .sorted(Comparator.comparing(Film::numberOfLikes).reversed())
                 .limit(count)
                 .collect(Collectors.toList());
     }

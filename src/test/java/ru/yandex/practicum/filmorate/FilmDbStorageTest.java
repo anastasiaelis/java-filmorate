@@ -28,7 +28,7 @@ class FilmDbStorageTest {
         User newUser = new User(1, "user@email.ru", "vanya123", "Ivan Petrov", LocalDate.of(1990, 1, 1), new HashSet<>());
         UserDbStorage userStorage = new UserDbStorage(jdbcTemplate);
         userStorage.create(newUser);
-        User newUser2 = new User(2, "udser@email.ru", "vanya123", "Ivan Petrov", LocalDate.of(1990, 1, 1), new HashSet<>());
+        User newUser2 = new User(2, "udsexr@email.ru", "таня", "Ivan Petrov", LocalDate.of(1990, 1, 1), new HashSet<>());
         userStorage.create(newUser2);
         Mpa apm = new Mpa(1, "G");
         Film newFilm = new Film(1, "useremail.ru", "vanya123", LocalDate.of(1990, 1, 1), 100, new ArrayList<>(), apm);
@@ -50,11 +50,15 @@ class FilmDbStorageTest {
         filmStorage.getFilmById(1);
 
         filmStorage.addLike(1, 1);
-        filmStorage.addLike(1, 2);
-        filmStorage.addLike(1, 3);
-        filmStorage.addLike(2, 2);
-        //filmStorage.addLike(2,1);
         List<Film> ccc = filmStorage.getTopLikedFilms(3);
+        filmStorage.addLike(1, 2);
+        ccc = filmStorage.getTopLikedFilms(3);
+        filmStorage.addLike(1, 3);
+        ccc = filmStorage.getTopLikedFilms(3);
+        filmStorage.addLike(2, 2);
+        ccc = filmStorage.getTopLikedFilms(3);
+
+        //filmStorage.addLike(2,1);
 
         // проверяем утверждения
         assertThat(savedFilm)
