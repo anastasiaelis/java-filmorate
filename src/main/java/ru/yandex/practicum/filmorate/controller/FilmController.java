@@ -58,9 +58,9 @@ public class FilmController {
         return storage.getTopLikedFilms(count);
     }
 
-    @GetMapping("/popular")
-    public Film getMostPopularFilm() {
-        List<Film> popFilm = storage.getTopLikedFilms(10);
-        return popFilm.get(1);
-    }
+//    @GetMapping("/popular")
+//    public Film getMostPopularFilm() {
+//        List<Film> popFilm = storage.getTopLikedFilms(10);
+//        return popFilm.get(1);
+//    }
 }
