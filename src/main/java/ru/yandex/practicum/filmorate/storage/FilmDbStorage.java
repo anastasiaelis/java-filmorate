@@ -192,7 +192,7 @@ public class FilmDbStorage implements FilmStorage {
                 "f.release_date as release_date, f.mpa_id as mpa_id, m.mpa_name as mpa_name, " +
                 "COUNT(fl.user_id) as likes_count FROM film AS f " +
                 "LEFT JOIN mpa AS m ON f.mpa_id = m.mpa_id LEFT JOIN film_like as fl " +
-               "ON f.film_id = fl.film_id GROUP BY f.film_id ORDER BY likes_count DESC";
+               "ON f.film_id = fl.film_id GROUP BY f.film_id ORDER BY likes_count ";
 
         if (co != null && co > 0) {
             sqlQuery += " limit " + co;
