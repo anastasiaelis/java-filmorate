@@ -36,9 +36,9 @@ class FilmDbStorageTest {
         FilmDbStorage filmStorage = new FilmDbStorage(jdbcTemplate);
         List<Mpa> c5 = filmStorage.getAllMpa();
         filmStorage.create(newFilm);
-        Film upFilm = new Film(1, "", "vanya123", LocalDate.of(1990, 1, 1), 190, new ArrayList<>(), apm);
+        Film upFilm = new Film(1, "фильм 1", "vanya123", LocalDate.of(1990, 1, 1), 190, new ArrayList<>(), apm);
         Film upFilm2 = new Film(2, "film2", "vmm3", LocalDate.of(1990, 1, 1), 100, new ArrayList<>(), apm);
-        Film upFilm3 = new Film(0, "film5", "vya123", LocalDate.of(1990, 1, 1), 100, new ArrayList<>(), apm);
+        Film upFilm3 = new Film(0, "film3", "vya123", LocalDate.of(1990, 1, 1), 100, new ArrayList<>(), apm);
         filmStorage.create(upFilm2);
         filmStorage.create(upFilm3);
         // вызываем тестируемый метод
@@ -56,6 +56,8 @@ class FilmDbStorageTest {
         filmStorage.addLike(1, 3);
         ccc = filmStorage.getTopLikedFilms(3);
         filmStorage.addLike(2, 2);
+        ccc = filmStorage.getTopLikedFilms(3);
+        filmStorage.removeLike(1,2);
         ccc = filmStorage.getTopLikedFilms(3);
 
         //filmStorage.addLike(2,1);

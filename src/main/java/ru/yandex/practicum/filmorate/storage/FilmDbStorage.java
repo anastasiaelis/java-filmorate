@@ -171,13 +171,18 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public void removeLike(Integer userId, Integer filmId) {
         String sqlQuery = "DELETE FROM film_like WHERE user_id = ? and film_id = ?";
-        jdbcTemplate.update(connection -> {
+        int rowsUpdated =  jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sqlQuery);
             stmt.setInt(1, userId);
             stmt.setInt(2, filmId);
             return stmt;
         });
-    }
+
+        if (rowsUpdated == 0) {
+            log.error("невозможно удалить Like");
+            throw new ValidationException("невозможно удалить Like");
+        }
+       }
 
     @Override
     public List<Film> getTopLikedFilms(Integer co) {
